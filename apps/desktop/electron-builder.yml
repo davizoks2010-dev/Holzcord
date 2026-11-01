@@ -1,0 +1,14 @@
+appId: app.holzcord.desktop
+productName: Holzcord
+directories: { output: release, buildResources: build }
+files: [dist, dist-electron, package.json]
+win:
+  target: [{ target: nsis, arch: [x64] }]
+  icon: build/icon.png
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+publish: { provider: github }
