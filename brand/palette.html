@@ -1,14 +1,13 @@
-<!doctype html><meta charset=utf-8><body style="margin:0;background:#FBF6EE;font-family:Nunito,'Segoe UI',Arial,sans-serif;color:#5A3A22;width:1200px">
-<div style="padding:48px 56px">
-<img src="logo-horizontal.svg" height="150"><h2 style="margin:36px 0 12px">Paleta</h2>
-<div style="display:flex;gap:14px;flex-wrap:wrap" id=p></div>
-<h2 style="margin:36px 0 12px">Tipografia</h2><p style="font-size:44px;font-weight:800;margin:0">Nunito ExtraBold — títulos</p><p style="font-size:22px;margin:6px 0">Nunito Regular — texto de mensagens, botões e menus. Gratuita (Google Fonts, licença OFL).</p>
-<h2 style="margin:36px 0 12px">Mascote &amp; ícone</h2><div style="display:flex;gap:28px;align-items:center"><img src="mascot-holzi.svg" height="200"><img src="icon.svg" height="200"><img src="icon.svg" height="96"><img src="icon.svg" height="48"><img src="icon.svg" height="24"></div>
-<h2 style="margin:36px 0 12px">Interface</h2>
-<div style="display:flex;border-radius:18px;overflow:hidden;height:210px;box-shadow:0 6px 24px #5a3a2233">
-<div style="width:70px;background:#EFE4D0"></div><div style="width:200px;background:#F7EEDF;padding:16px"><b># geral</b><br><br>🔊 Voz</div>
-<div style="flex:1;background:#FFFDF8;padding:16px"><b style="color:#C98B4E">Ana</b> Bora fazer a call? 🌿<br><br><span style="background:#C98B4E;color:#fff;padding:8px 16px;border-radius:12px">Compartilhar tela</span></div></div>
-</div><script>
-[['Madeira','#C98B4E','principal'],['Nogueira','#5A3A22','texto'],['Creme','#FBF6EE','fundo'],['Areia','#F7EEDF','painéis'],['Mel','#F2B84B','destaque'],['Sálvia','#8FB996','sucesso/online'],['Céu','#A7D3E8','links'],['Coral','#E8806E','alerta']]
-.forEach(([n,c,u])=>p.insertAdjacentHTML('beforeend',`<div style="width:130px"><div style="height:80px;border-radius:16px;background:${c};border:1px solid #5a3a2222"></div><b>${n}</b><br><small>${c} · ${u}</small></div>`))
-</script>
+<!doctype html><meta charset=utf-8><style>
+@font-face{font-family:J;font-weight:800;src:url(file:///home/user/Holzcord/node_modules/@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-800-normal.woff)}
+@font-face{font-family:J;font-weight:400;src:url(file:///home/user/Holzcord/node_modules/@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-400-normal.woff)}
+@font-face{font-family:J;font-weight:700;src:url(file:///home/user/Holzcord/node_modules/@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-700-normal.woff)}
+body{margin:0;background:#F7F8FC;font-family:J;color:#1B1B3A;width:1200px}h2{margin:38px 0 12px;font-size:20px}</style>
+<div style="padding:48px 56px"><img src="logo-horizontal.svg" height="150"><h2>Paleta</h2><div style="display:flex;gap:14px;flex-wrap:wrap" id=p></div>
+<h2>Tipografia</h2><p style="font-size:46px;font-weight:800;margin:0;letter-spacing:-1px">Plus Jakarta Sans ExtraBold</p><p style="font-size:20px;margin:6px 0;color:#5B5F82">Texto de mensagens, botões e menus em Regular/Bold. Gratuita (Google Fonts, licença OFL).</p>
+<h2>Emblema</h2><div style="display:flex;gap:28px;align-items:center"><img src="icon.svg" height="220"><img src="icon.svg" height="96"><img src="icon.svg" height="48"><img src="icon.svg" height="24"><img src="icon.svg" height="16"></div>
+<h2>Interface</h2><div style="display:flex;border-radius:18px;overflow:hidden;height:220px;box-shadow:0 10px 30px #4f46e522;border:1px solid #DDE0F0">
+<div style="width:70px;background:#E8EAF7;padding:12px;box-sizing:border-box"><img src="icon.svg" width=46></div><div style="width:210px;background:#EFF1FA;padding:16px"><b># geral</b><br><br><span style="color:#5B5F82">🔊 Voz</span></div>
+<div style="flex:1;background:#fff;padding:16px"><b style="color:#4F46E5">Ana</b> Bora fazer a call? <br><br><span style="background:#4F46E5;color:#fff;padding:10px 18px;border-radius:12px;font-weight:700">Compartilhar tela</span> <span style="background:#2DD4BF;color:#06312c;padding:10px 18px;border-radius:12px;font-weight:700">Ao vivo</span></div></div></div>
+<script>[['Índigo','#4F46E5','principal'],['Violeta','#7C5CFF','gradiente'],['Tinta','#1B1B3A','texto'],['Gelo','#F7F8FC','fundo'],['Névoa','#EFF1FA','painéis'],['Borda','#DDE0F0','divisórias'],['Turquesa','#2DD4BF','online / ao vivo'],['Coral','#F0647A','alerta']]
+.forEach(([n,c,u])=>p.insertAdjacentHTML('beforeend','<div style="width:130px"><div style="height:80px;border-radius:16px;background:'+c+';border:1px solid #1b1b3a18"></div><b>'+n+'</b><br><small style="color:#5B5F82">'+c+' · '+u+'</small></div>'))</script>

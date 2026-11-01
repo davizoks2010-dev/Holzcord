@@ -12,7 +12,7 @@ function Tile({ p, source }: { p: Participant; source: Track.Source }) {
     return () => { pub?.track?.detach(ref.current!) }
   })
   return (
-    <div className={`relative overflow-hidden rounded-lg bg-black ${p.isSpeaking ? 'ring-2 ring-sage' : ''}`}>
+    <div className={`relative overflow-hidden rounded-lg bg-black ${p.isSpeaking ? 'ring-2 ring-holz-live' : ''}`}>
       <video ref={ref} autoPlay playsInline muted={p.isLocal} className="h-full w-full object-contain" />
       <span className="absolute bottom-1 left-2 rounded bg-black/60 px-2 text-sm">
         {p.name}{source === Track.Source.ScreenShare ? ' (tela)' : ''}
@@ -57,8 +57,8 @@ export default function VoiceRoom({ channel }: { channel: Channel }) {
   const btn = (on: boolean) => `rounded px-4 py-2 font-medium ${on ? 'bg-holz-500 text-white' : 'bg-holz-200'}`
   return (
     <div className="flex h-full flex-col">
-      <header className="p-3 font-semibold border-b border-holz-900/15">🔊 {channel.name}</header>
-      {state === 'connecting' && <p className="p-4 text-[#8A7A6A]">Conectando…</p>}
+      <header className="p-3 font-semibold border-b border-holz-line">🔊 {channel.name}</header>
+      {state === 'connecting' && <p className="p-4 text-[#6B6F8D]">Conectando…</p>}
       {state === 'error' && <p className="p-4 text-coral">Falha ao conectar: {err}</p>}
       <div className="grid flex-1 auto-rows-fr grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-2 p-4">
         {parts.map(p => <Tile key={p.identity + 'cam'} p={p} source={Track.Source.Camera} />)}
@@ -83,7 +83,7 @@ export default function VoiceRoom({ channel }: { channel: Channel }) {
                 </button>
               ))}
             </div>
-            <button className="mt-3 text-sm text-[#8A7A6A]" onClick={() => pick(null)}>Cancelar</button>
+            <button className="mt-3 text-sm text-[#6B6F8D]" onClick={() => pick(null)}>Cancelar</button>
           </div>
         </div>
       )}

@@ -1,4 +1,4 @@
-import mascot from '../../assets/mascot.svg'
+import logo from '../../assets/logo.svg'
 import { useState } from 'react'
 import { supabase } from '../../lib/supabase'
 
@@ -14,18 +14,18 @@ export default function Login() {
       : await supabase.auth.signUp({ email, password, options: { data: { username } } })
     if (error) setErr(error.message)
   }
-  const input = 'w-full rounded bg-white border border-holz-900/15 p-2 outline-none focus:border-holz-500'
+  const input = 'w-full rounded bg-white border border-holz-line p-2 outline-none focus:border-holz-500'
   return (
     <div className="h-full grid place-items-center bg-holz-100">
       <form onSubmit={submit} className="w-96 space-y-3 rounded-lg bg-holz-50 p-8 shadow-xl shadow-holz-900/10">
-        <img src={mascot} className="mx-auto h-24" /><h1 className="text-center text-3xl font-extrabold text-holz-900">Holz<span className="text-holz-500">cord</span></h1>
-        <p className="text-center text-sm text-[#8A7A6A]">{mode === 'in' ? 'Entre na sua conta' : 'Crie sua conta gratuita'}</p>
+        <img src={logo} className="mx-auto h-20" /><h1 className="text-center text-3xl font-extrabold text-holz-900">Holz<span className="text-holz-500">cord</span></h1>
+        <p className="text-center text-sm text-[#6B6F8D]">{mode === 'in' ? 'Entre na sua conta' : 'Crie sua conta gratuita'}</p>
         {mode === 'up' && <input className={input} placeholder="Nome de usuário" value={username} onChange={e => setUsername(e.target.value)} required minLength={2} />}
         <input className={input} type="email" placeholder="E-mail" value={email} onChange={e => setEmail(e.target.value)} required />
         <input className={input} type="password" placeholder="Senha" value={password} onChange={e => setPassword(e.target.value)} required minLength={6} />
         {err && <p className="text-sm text-coral">{err}</p>}
         <button className="w-full rounded bg-holz-500 p-2 font-semibold text-white hover:bg-holz-600">{mode === 'in' ? 'Entrar' : 'Registrar'}</button>
-        <button type="button" className="text-sm text-sky-700" onClick={() => setMode(mode === 'in' ? 'up' : 'in')}>
+        <button type="button" className="text-sm text-holz-500" onClick={() => setMode(mode === 'in' ? 'up' : 'in')}>
           {mode === 'in' ? 'Precisa de uma conta? Registre-se' : 'Já tenho conta'}
         </button>
       </form>

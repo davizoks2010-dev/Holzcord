@@ -41,12 +41,12 @@ export default function Chat({ channel, userId }: { channel: Channel; userId: st
 
   return (
     <div className="flex h-full flex-col">
-      <header className="p-3 font-semibold border-b border-holz-900/15"># {channel.name}</header>
+      <header className="p-3 font-semibold border-b border-holz-line"># {channel.name}</header>
       <div className="flex-1 overflow-y-auto p-4 space-y-3">
         {msgs.map(m => (
           <div key={m.id} className="group">
             <span className="font-semibold text-holz-500">{m.profiles?.username ?? 'usuário'}</span>
-            <span className="ml-2 text-xs text-[#8A7A6A]">{new Date(m.created_at).toLocaleString()}</span>
+            <span className="ml-2 text-xs text-[#6B6F8D]">{new Date(m.created_at).toLocaleString()}</span>
             {m.author_id === userId && (
               <button className="ml-2 hidden text-xs text-coral group-hover:inline"
                 onClick={() => supabase.from('messages').delete().eq('id', m.id)}>apagar</button>
@@ -54,7 +54,7 @@ export default function Chat({ channel, userId }: { channel: Channel; userId: st
             {m.attachment_url
               ? /\.(png|jpe?g|gif|webp)$/i.test(m.attachment_url)
                 ? <img src={m.attachment_url} className="mt-1 max-h-72 rounded" />
-                : <a className="block text-sky-700 underline" target="_blank" rel="noreferrer noopener" href={m.attachment_url}>{m.content}</a>
+                : <a className="block text-holz-500 underline" target="_blank" rel="noreferrer noopener" href={m.attachment_url}>{m.content}</a>
               : <div className="whitespace-pre-wrap break-words" dangerouslySetInnerHTML={{ __html: renderMarkdown(m.content) }} />}
           </div>
         ))}

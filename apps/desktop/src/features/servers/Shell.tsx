@@ -41,16 +41,16 @@ export default function Shell({ session }: { session: Session }) {
             {s.name.slice(0, 2).toUpperCase()}
           </button>
         ))}
-        <button title="Criar servidor" onClick={createServer} className="h-12 w-12 rounded-2xl bg-holz-50 text-emerald-700 text-2xl">+</button>
-        <button title="Entrar com convite" onClick={joinServer} className="h-12 w-12 rounded-2xl bg-holz-50 text-sky-700">→</button>
+        <button title="Criar servidor" onClick={createServer} className="h-12 w-12 rounded-2xl bg-holz-50 text-holz-live text-2xl">+</button>
+        <button title="Entrar com convite" onClick={joinServer} className="h-12 w-12 rounded-2xl bg-holz-50 text-holz-500">→</button>
       </nav>
       <aside className="w-60 bg-holz-100 flex flex-col">
-        <header className="p-3 font-semibold border-b border-holz-900/15 truncate">{server?.name ?? 'Holzcord'}</header>
+        <header className="p-3 font-semibold border-b border-holz-line truncate">{server?.name ?? 'Holzcord'}</header>
         <div className="flex-1 overflow-y-auto p-2 space-y-1">
-          {server && <p className="text-xs text-[#8A7A6A] px-2 pb-2">Convite: <code className="select-all">{server.invite_code}</code></p>}
+          {server && <p className="text-xs text-[#6B6F8D] px-2 pb-2">Convite: <code className="select-all">{server.invite_code}</code></p>}
           {channels.map(c => (
             <button key={c.id} onClick={() => setChannel(c)}
-              className={`w-full text-left rounded px-2 py-1 hover:bg-holz-200 ${channel?.id === c.id ? 'bg-holz-200' : 'text-[#8A7A6A]'}`}>
+              className={`w-full text-left rounded px-2 py-1 hover:bg-holz-200 ${channel?.id === c.id ? 'bg-holz-200' : 'text-[#6B6F8D]'}`}>
               {c.type === 'text' ? '#' : '🔊'} {c.name}
             </button>
           ))}
@@ -61,7 +61,7 @@ export default function Shell({ session }: { session: Session }) {
         </footer>
       </aside>
       <main className="flex-1 bg-holz-50 min-w-0">
-        {!channel && <div className="h-full grid place-items-center text-[#8A7A6A]">Selecione um canal</div>}
+        {!channel && <div className="h-full grid place-items-center text-[#6B6F8D]">Selecione um canal</div>}
         {channel?.type === 'text' && <Chat key={channel.id} channel={channel} userId={session.user.id} />}
         {channel?.type === 'voice' && <VoiceRoom key={channel.id} channel={channel} />}
       </main>

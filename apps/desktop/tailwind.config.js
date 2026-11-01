@@ -1,8 +1,8 @@
 export default {
   content: ['./index.html', './src/**/*.{ts,tsx}'],
   theme: { extend: {
-    fontFamily: { sans: ['Nunito', 'Segoe UI', 'system-ui', 'sans-serif'] },
-    colors: { holz: { 50: '#FBF6EE', 100: '#F7EEDF', 200: '#EFE4D0', 500: '#C98B4E', 600: '#B27339', 900: '#5A3A22', honey: '#F2B84B', sage: '#8FB996', sky: '#A7D3E8', coral: '#E8806E' } }
+    fontFamily: { sans: ['"Plus Jakarta Sans"', 'Segoe UI', 'system-ui', 'sans-serif'] },
+    colors: { holz: { 50: '#F7F8FC', 100: '#EFF1FA', 200: '#E3E6F4', 500: '#4F46E5', 600: '#4338CA', 900: '#1B1B3A', violet: '#7C5CFF', live: '#2DD4BF', coral: '#F0647A', line: '#DDE0F0' } }
   } },
   plugins: []
 }
