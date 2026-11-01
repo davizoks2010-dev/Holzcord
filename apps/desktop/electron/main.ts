@@ -8,7 +8,7 @@ let pendingScreenResolve: ((id: string | null) => void) | null = null
 function createWindow() {
   win = new BrowserWindow({
     width: 1280, height: 800, minWidth: 940, minHeight: 560,
-    backgroundColor: '#1e1f22', title: 'Holzcord',
+    backgroundColor: '#1e1f22', title: 'Holzcord', icon: path.join(__dirname, '../build/icon.png'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true, nodeIntegration: false, sandbox: true
@@ -50,7 +50,7 @@ function registerPtt(accelerator: string | null) {
 app.whenReady().then(async () => {
   setupPermissions(); setupScreenShare(); createWindow()
   ipcMain.handle('ptt:set', (_e, acc: string | null) => registerPtt(acc))
-  tray = new Tray(nativeImage.createEmpty())
+  tray = new Tray(nativeImage.createFromPath(path.join(__dirname, '../build/icon.png')).resize({ width: 16, height: 16 }))
   tray.setToolTip('Holzcord')
   tray.setContextMenu(Menu.buildFromTemplate([
     { label: 'Abrir Holzcord', click: () => win?.show() },

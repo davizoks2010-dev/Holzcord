@@ -1,10 +1,10 @@
 appId: app.holzcord.desktop
 productName: Holzcord
 directories: { output: release, buildResources: build }
-files: [dist, dist-electron, package.json]
+files: [dist, dist-electron, build/icon.png, package.json]
 win:
   target: [{ target: nsis, arch: [x64] }]
-  icon: build/icon.png
+  icon: build/icon.ico
 nsis:
   oneClick: false
   perMachine: false

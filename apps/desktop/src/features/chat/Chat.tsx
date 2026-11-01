@@ -41,31 +41,31 @@ export default function Chat({ channel, userId }: { channel: Channel; userId: st
 
   return (
     <div className="flex h-full flex-col">
-      <header className="p-3 font-semibold border-b border-black/30"># {channel.name}</header>
+      <header className="p-3 font-semibold border-b border-holz-900/15"># {channel.name}</header>
       <div className="flex-1 overflow-y-auto p-4 space-y-3">
         {msgs.map(m => (
           <div key={m.id} className="group">
             <span className="font-semibold text-holz-500">{m.profiles?.username ?? 'usuário'}</span>
-            <span className="ml-2 text-xs text-gray-500">{new Date(m.created_at).toLocaleString()}</span>
+            <span className="ml-2 text-xs text-[#8A7A6A]">{new Date(m.created_at).toLocaleString()}</span>
             {m.author_id === userId && (
-              <button className="ml-2 hidden text-xs text-red-400 group-hover:inline"
+              <button className="ml-2 hidden text-xs text-coral group-hover:inline"
                 onClick={() => supabase.from('messages').delete().eq('id', m.id)}>apagar</button>
             )}
             {m.attachment_url
               ? /\.(png|jpe?g|gif|webp)$/i.test(m.attachment_url)
                 ? <img src={m.attachment_url} className="mt-1 max-h-72 rounded" />
-                : <a className="block text-sky-400 underline" target="_blank" rel="noreferrer noopener" href={m.attachment_url}>{m.content}</a>
+                : <a className="block text-sky-700 underline" target="_blank" rel="noreferrer noopener" href={m.attachment_url}>{m.content}</a>
               : <div className="whitespace-pre-wrap break-words" dangerouslySetInnerHTML={{ __html: renderMarkdown(m.content) }} />}
           </div>
         ))}
         <div ref={bottom} />
       </div>
       <form onSubmit={send} className="flex gap-2 p-4">
-        <label className="grid h-10 w-10 cursor-pointer place-items-center rounded bg-[#383a40]">+
+        <label className="grid h-10 w-10 cursor-pointer place-items-center rounded bg-holz-200">+
           <input type="file" hidden onChange={e => e.target.files?.[0] && upload(e.target.files[0])} />
         </label>
         <input value={text} onChange={e => setText(e.target.value)} placeholder={`Conversar em #${channel.name}`}
-          className="flex-1 rounded bg-[#383a40] px-3 outline-none" />
+          className="flex-1 rounded bg-holz-200 px-3 outline-none" />
       </form>
     </div>
   )

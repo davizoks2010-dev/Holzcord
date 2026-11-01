@@ -1,0 +1,14 @@
+<!doctype html><meta charset=utf-8><body style="margin:0;background:#FBF6EE;font-family:Nunito,'Segoe UI',Arial,sans-serif;color:#5A3A22;width:1200px">
+<div style="padding:48px 56px">
+<img src="logo-horizontal.svg" height="150"><h2 style="margin:36px 0 12px">Paleta</h2>
+<div style="display:flex;gap:14px;flex-wrap:wrap" id=p></div>
+<h2 style="margin:36px 0 12px">Tipografia</h2><p style="font-size:44px;font-weight:800;margin:0">Nunito ExtraBold — títulos</p><p style="font-size:22px;margin:6px 0">Nunito Regular — texto de mensagens, botões e menus. Gratuita (Google Fonts, licença OFL).</p>
+<h2 style="margin:36px 0 12px">Mascote &amp; ícone</h2><div style="display:flex;gap:28px;align-items:center"><img src="mascot-holzi.svg" height="200"><img src="icon.svg" height="200"><img src="icon.svg" height="96"><img src="icon.svg" height="48"><img src="icon.svg" height="24"></div>
+<h2 style="margin:36px 0 12px">Interface</h2>
+<div style="display:flex;border-radius:18px;overflow:hidden;height:210px;box-shadow:0 6px 24px #5a3a2233">
+<div style="width:70px;background:#EFE4D0"></div><div style="width:200px;background:#F7EEDF;padding:16px"><b># geral</b><br><br>🔊 Voz</div>
+<div style="flex:1;background:#FFFDF8;padding:16px"><b style="color:#C98B4E">Ana</b> Bora fazer a call? 🌿<br><br><span style="background:#C98B4E;color:#fff;padding:8px 16px;border-radius:12px">Compartilhar tela</span></div></div>
+</div><script>
+[['Madeira','#C98B4E','principal'],['Nogueira','#5A3A22','texto'],['Creme','#FBF6EE','fundo'],['Areia','#F7EEDF','painéis'],['Mel','#F2B84B','destaque'],['Sálvia','#8FB996','sucesso/online'],['Céu','#A7D3E8','links'],['Coral','#E8806E','alerta']]
+.forEach(([n,c,u])=>p.insertAdjacentHTML('beforeend',`<div style="width:130px"><div style="height:80px;border-radius:16px;background:${c};border:1px solid #5a3a2222"></div><b>${n}</b><br><small>${c} · ${u}</small></div>`))
+</script>

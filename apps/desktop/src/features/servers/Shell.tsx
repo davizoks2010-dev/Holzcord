@@ -34,34 +34,34 @@ export default function Shell({ session }: { session: Session }) {
 
   return (
     <div className="flex h-full">
-      <nav className="w-[72px] bg-[#1e1f22] flex flex-col items-center gap-2 py-3">
+      <nav className="w-[72px] bg-holz-200 flex flex-col items-center gap-2 py-3">
         {servers.map(s => (
           <button key={s.id} title={s.name} onClick={() => setServer(s)}
-            className={`h-12 w-12 rounded-2xl hover:rounded-xl bg-[#313338] font-bold transition-all ${server?.id === s.id ? 'bg-holz-500' : ''}`}>
+            className={`h-12 w-12 rounded-2xl hover:rounded-xl font-bold transition-all ${server?.id === s.id ? 'bg-holz-500 text-white' : 'bg-holz-50'}`}>
             {s.name.slice(0, 2).toUpperCase()}
           </button>
         ))}
-        <button title="Criar servidor" onClick={createServer} className="h-12 w-12 rounded-2xl bg-[#313338] text-green-400 text-2xl">+</button>
-        <button title="Entrar com convite" onClick={joinServer} className="h-12 w-12 rounded-2xl bg-[#313338] text-sky-400">→</button>
+        <button title="Criar servidor" onClick={createServer} className="h-12 w-12 rounded-2xl bg-holz-50 text-emerald-700 text-2xl">+</button>
+        <button title="Entrar com convite" onClick={joinServer} className="h-12 w-12 rounded-2xl bg-holz-50 text-sky-700">→</button>
       </nav>
-      <aside className="w-60 bg-[#2b2d31] flex flex-col">
-        <header className="p-3 font-semibold border-b border-black/30 truncate">{server?.name ?? 'Holzcord'}</header>
+      <aside className="w-60 bg-holz-100 flex flex-col">
+        <header className="p-3 font-semibold border-b border-holz-900/15 truncate">{server?.name ?? 'Holzcord'}</header>
         <div className="flex-1 overflow-y-auto p-2 space-y-1">
-          {server && <p className="text-xs text-gray-400 px-2 pb-2">Convite: <code className="select-all">{server.invite_code}</code></p>}
+          {server && <p className="text-xs text-[#8A7A6A] px-2 pb-2">Convite: <code className="select-all">{server.invite_code}</code></p>}
           {channels.map(c => (
             <button key={c.id} onClick={() => setChannel(c)}
-              className={`w-full text-left rounded px-2 py-1 hover:bg-white/10 ${channel?.id === c.id ? 'bg-white/15' : 'text-gray-400'}`}>
+              className={`w-full text-left rounded px-2 py-1 hover:bg-holz-200 ${channel?.id === c.id ? 'bg-holz-200' : 'text-[#8A7A6A]'}`}>
               {c.type === 'text' ? '#' : '🔊'} {c.name}
             </button>
           ))}
         </div>
-        <footer className="p-2 text-sm flex justify-between bg-[#232428]">
+        <footer className="p-2 text-sm flex justify-between bg-holz-200">
           <span className="truncate">{session.user.email}</span>
-          <button onClick={() => supabase.auth.signOut()} className="text-red-400">Sair</button>
+          <button onClick={() => supabase.auth.signOut()} className="text-coral">Sair</button>
         </footer>
       </aside>
-      <main className="flex-1 bg-[#313338] min-w-0">
-        {!channel && <div className="h-full grid place-items-center text-gray-500">Selecione um canal</div>}
+      <main className="flex-1 bg-holz-50 min-w-0">
+        {!channel && <div className="h-full grid place-items-center text-[#8A7A6A]">Selecione um canal</div>}
         {channel?.type === 'text' && <Chat key={channel.id} channel={channel} userId={session.user.id} />}
         {channel?.type === 'voice' && <VoiceRoom key={channel.id} channel={channel} />}
       </main>
