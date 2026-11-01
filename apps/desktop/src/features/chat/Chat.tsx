@@ -46,7 +46,7 @@ export default function Chat({ channel, userId }: { channel: Channel; userId: st
         {msgs.map(m => (
           <div key={m.id} className="group">
             <span className="font-semibold text-holz-500">{m.profiles?.username ?? 'usuário'}</span>
-            <span className="ml-2 text-xs text-[#6B6F8D]">{new Date(m.created_at).toLocaleString()}</span>
+            <span className="ml-2 text-xs text-holz-mute">{new Date(m.created_at).toLocaleString()}</span>
             {m.author_id === userId && (
               <button className="ml-2 hidden text-xs text-coral group-hover:inline"
                 onClick={() => supabase.from('messages').delete().eq('id', m.id)}>apagar</button>
