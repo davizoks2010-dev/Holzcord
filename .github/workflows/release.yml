@@ -13,6 +13,17 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run build
-      - run: npx electron-builder --win --publish always
+      - run: npx electron-builder --win --publish never
         working-directory: apps/desktop
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Holzcord-Setup
+          path: |
+            apps/desktop/release/*.exe
+            apps/desktop/release/latest.yml
+      - name: Publicar release
+        shell: bash
         env: { GH_TOKEN: '${{ secrets.GITHUB_TOKEN }}' }
+        run: |
+          V=$(node -p "require('./apps/desktop/package.json').version")
+          gh release create "v$V-build${{ github.run_number }}" apps/desktop/release/*.exe apps/desktop/release/latest.yml --title "Holzcord $V" --notes "Instalador Windows" || true

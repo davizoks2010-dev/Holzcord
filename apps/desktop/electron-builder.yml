@@ -12,4 +12,4 @@ nsis:
   allowToChangeInstallationDirectory: true
   createDesktopShortcut: true
   createStartMenuShortcut: true
-publish: { provider: github }
+publish: { provider: github, owner: davizoks2010-dev, repo: Holzcord }
