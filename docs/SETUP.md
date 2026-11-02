@@ -35,3 +35,6 @@ Execute também `supabase/migrations/0003_cargos_e_canais.sql` no SQL Editor (de
 
 ## Lote v0.2 (DMs, reações, fixadas, perfil, não lidas, configurações do servidor)
 Execute `supabase/migrations/0004_dms_reacoes_perfil.sql` no SQL Editor (depois de 0001, 0002 e 0003).
+
+## Lote v0.3 (amigos, grupos, categorias, canais privados, moderação, enquetes)
+Execute `supabase/migrations/0005_social_moderacao.sql` no SQL Editor (depois de 0001 a 0004).

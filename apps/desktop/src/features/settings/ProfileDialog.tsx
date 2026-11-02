@@ -46,7 +46,7 @@ export default function ProfileDialog({ profile, onSaved, onClose }: { profile: 
         {err && <p className="text-sm text-holz-coral">{err}</p>}
         <div className="flex justify-end gap-2">
           <button className="px-3 text-holz-mute" onClick={onClose}>Cancelar</button>
-          <button disabled={busy} onClick={save} className="btn bg-holz-500 text-holz-rail disabled:opacity-50">Salvar</button>
+          <button disabled={busy} onClick={save} className="btn bg-holz-500 text-holz-onaccent disabled:opacity-50">Salvar</button>
         </div>
       </div>
     </Modal>

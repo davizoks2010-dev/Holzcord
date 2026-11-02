@@ -15,7 +15,7 @@ export default function Setup() {
         <p className="text-center font-mono text-xs text-holz-mute">// só na primeira vez</p>
         <input className={input} value={url} onChange={e => setUrl(e.target.value)} placeholder="URL do Supabase" required />
         <input className={input} value={key} onChange={e => setKey(e.target.value)} placeholder="Chave anon / publishable (sb_publishable_…)" required />
-        <button className="btn w-full justify-center bg-holz-500 text-holz-rail hover:bg-holz-600">Salvar e abrir</button>
+        <button className="btn w-full justify-center bg-holz-500 text-holz-onaccent hover:bg-holz-600">Salvar e abrir</button>
       </form>
     </div>
   )

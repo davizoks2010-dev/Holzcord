@@ -3,6 +3,11 @@ import { supabase, type Channel, type Message } from '../../lib/supabase'
 import { mentionsUser, renderMarkdown } from '../../lib/format'
 import Icon from '../../components/Icon'
 import Avatar from '../../components/Avatar'
+import PollDialog from './PollDialog'
+
+const PICKER = ['😀','😂','🥹','😍','😎','🤔','😮','😢','😡','👍','👎','👏','🙏','💪','🎉','🔥','❤️','💔','✨','👀','🚀','🍕','☕','🎮','🎵','⭐','✅','❌','💯','🤝']
+interface Poll { message_id: string; question: string; options: string[]; multiple: boolean }
+interface Vote { message_id: string; user_id: string; option_idx: number }
 
 const SELECT = '*, profiles(username,avatar_url)'
 const EMOJIS = ['👍', '❤️', '😂', '🎉', '😮', '😢', '🔥', '👀']
@@ -21,6 +26,11 @@ export default function Chat({ channel, userId, username, canModerate = false }:
   const [pickerFor, setPickerFor] = useState<string | null>(null)
   const [typing, setTyping] = useState<Record<string, { name: string; at: number }>>({})
   const [panel, setPanel] = useState<'pins' | 'search' | null>(null)
+  const [polls, setPolls] = useState<Record<string, Poll>>({})
+  const [votes, setVotes] = useState<Vote[]>([])
+  const [showPoll, setShowPoll] = useState(false)
+  const [showEmoji, setShowEmoji] = useState(false)
+  const [sendErr, setSendErr] = useState('')
   const [pins, setPins] = useState<Message[]>([])
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<Message[] | null>(null)
@@ -45,6 +55,7 @@ export default function Chat({ channel, userId, username, canModerate = false }:
         setMsgs(m => payload.eventType === 'INSERT' ? [...m, data as Message] : m.map(x => x.id === data.id ? (data as Message) : x))
       })
       .on('postgres_changes', { event: '*', schema: 'public', table: 'reactions' }, () => { setMsgs(m => { loadReactions(m.map(x => x.id)); return m }) })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'poll_votes' }, () => { setMsgs(m => { loadPolls(m.map(x => x.id)); return m }) })
       .subscribe()
     const tc = supabase.channel(`typing:${channel.id}`)
     tc.on('broadcast', { event: 'typing' }, ({ payload }) => {
@@ -56,6 +67,13 @@ export default function Chat({ channel, userId, username, canModerate = false }:
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [channel.id])
   useEffect(() => { bottom.current?.scrollIntoView() }, [msgs.length])
+  async function loadPolls(ids: string[]) {
+    if (!ids.length) return
+    const [p, v] = await Promise.all([supabase.from('polls').select('*').in('message_id', ids), supabase.from('poll_votes').select('message_id,user_id,option_idx').in('message_id', ids)])
+    setPolls(Object.fromEntries(((p.data as Poll[]) ?? []).map(x => [x.message_id, x]))); setVotes((v.data as Vote[]) ?? [])
+  }
+  const idsKey = msgs.map(m => m.id).join(',')
+  useEffect(() => { loadPolls(msgs.map(m => m.id)) /* eslint-disable-next-line react-hooks/exhaustive-deps */ }, [idsKey])
 
   function onType(v: string) {
     setText(v)
@@ -68,7 +86,12 @@ export default function Chat({ channel, userId, username, canModerate = false }:
     e.preventDefault()
     const content = text.trim(); if (!content) return
     setText(''); const reply_to = replyTo?.id ?? null; setReplyTo(null)
-    await supabase.from('messages').insert({ channel_id: channel.id, author_id: userId, content, reply_to })
+    setSendErr('')
+    const { error } = await supabase.from('messages').insert({ channel_id: channel.id, author_id: userId, content, reply_to })
+    if (error) { setText(content); setSendErr(error.code === '42501' ? 'Não foi possível enviar agora: modo lento, silêncio, bloqueio ou falta de acesso.' : error.message) }
+  }
+  async function votePoll(mid: string, idx: number) {
+    const { error } = await supabase.rpc('vote_poll', { p_message: mid, p_idx: idx }); if (error) alert(error.message)
   }
   async function upload(file: File) {
     const path = `${userId}/${Date.now()}-${file.name.replace(/[^\w.-]/g, '_')}`
@@ -114,7 +137,8 @@ export default function Chat({ channel, userId, username, canModerate = false }:
     <div className="flex h-full">
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="flex items-center gap-2 border-b border-holz-line p-4 font-display text-lg font-semibold">
-          <Icon name={isDM ? 'dm' : 'text'} className="text-holz-500" /> <span className="flex-1 truncate">{channel.name}</span>
+          <Icon name={isDM ? 'dm' : 'text'} className="text-holz-500" /> <span className="truncate">{channel.name}</span>
+          <span className="flex-1 truncate font-sans text-sm font-normal text-holz-mute">{channel.topic}{(channel.slowmode_seconds ?? 0) > 0 && ` · modo lento ${channel.slowmode_seconds}s`}{channel.is_private && ' · privado'}</span>
           <button title="Mensagens fixadas" onClick={openPins} className={panel === 'pins' ? 'text-holz-500' : 'text-holz-mute hover:text-holz-500'}><Icon name="pin" /></button>
           <button title="Buscar" onClick={() => { setPanel(p => p === 'search' ? null : 'search'); setResults(null) }} className={panel === 'search' ? 'text-holz-500' : 'text-holz-mute hover:text-holz-500'}><Icon name="search" /></button>
         </header>
@@ -150,7 +174,24 @@ export default function Chat({ channel, userId, username, canModerate = false }:
                       {EMOJIS.map(e => <button key={e} onClick={() => react(m, e)} className="hover:scale-125">{e}</button>)}
                     </div>
                   )}
-                  {m.attachment_url
+                  {polls[m.id] ? (() => {
+                    const pl = polls[m.id]; const mv = votes.filter(v => v.message_id === m.id); const total = new Set(mv.map(v => v.user_id)).size
+                    return (
+                      <div className="min-w-[16rem] space-y-1.5">
+                        <div className="font-display font-semibold">📊 {pl.question}</div>
+                        {pl.options.map((o, i) => {
+                          const n = mv.filter(v => v.option_idx === i).length; const mine = mv.some(v => v.option_idx === i && v.user_id === userId)
+                          return (
+                            <button key={i} onClick={() => votePoll(m.id, i)} className={`relative block w-full overflow-hidden rounded-leafsm border px-3 py-1.5 text-left text-sm ${mine ? 'border-holz-500' : 'border-holz-line'}`}>
+                              <span className="absolute inset-y-0 left-0 bg-holz-500/20" style={{ width: `${total ? (n / total) * 100 : 0}%` }} />
+                              <span className="relative flex justify-between gap-3"><span>{o}</span><span className="font-mono text-xs">{n}</span></span>
+                            </button>
+                          )
+                        })}
+                        <div className="font-mono text-[10px] text-holz-mute">{total} {total === 1 ? 'voto' : 'votos'}{pl.multiple && ' · várias respostas'}</div>
+                      </div>
+                    )
+                  })() : m.attachment_url
                     ? /\.(png|jpe?g|gif|webp)$/i.test(m.attachment_url)
                       ? <img src={m.attachment_url} className="mt-1 max-h-72 rounded-leafsm" />
                       : <a className="flex items-center gap-1.5 text-holz-500 underline" target="_blank" rel="noreferrer noopener" href={m.attachment_url}><Icon name="clip" size={16} />{m.content}</a>
@@ -187,13 +228,21 @@ export default function Chat({ channel, userId, username, canModerate = false }:
             <button onClick={() => setReplyTo(null)}><Icon name="x" size={14} /></button>
           </div>
         )}
-        <form onSubmit={send} className="flex items-center gap-2 p-4 pt-1">
+        {sendErr && <p className="mx-4 text-sm text-holz-coral">{sendErr}</p>}
+        <form onSubmit={send} className="relative flex items-center gap-2 p-4 pt-1">
+          {showEmoji && (
+            <div className="absolute bottom-16 right-20 z-10 grid w-64 grid-cols-6 gap-1 rounded-leaf border border-holz-line bg-holz-100 p-2">
+              {PICKER.map(e => <button type="button" key={e} onClick={() => { setText(t => t + e); setShowEmoji(false) }} className="rounded p-1 text-lg hover:bg-holz-200">{e}</button>)}
+            </div>
+          )}
           <label title="Anexar" className="pebble grid h-11 w-11 cursor-pointer place-items-center bg-holz-200 text-holz-mute hover:text-holz-500">
             <Icon name="clip" /><input type="file" hidden onChange={e => e.target.files?.[0] && upload(e.target.files[0])} />
           </label>
           <input value={text} onChange={e => onType(e.target.value)} placeholder={isDM ? `Conversar com ${channel.name}` : `Conversar em ${channel.name}  (use @nome para mencionar)`}
             className="h-11 flex-1 rounded-leaf border border-holz-line bg-holz-100 px-4 outline-none focus:border-holz-500" />
-          <button title="Enviar" className="btn h-11 bg-holz-500 text-holz-rail hover:bg-holz-600"><Icon name="send" size={18} /></button>
+          <button type="button" title="Emoji" onClick={() => setShowEmoji(v => !v)} className="text-holz-mute hover:text-holz-500"><Icon name="smile" size={22} /></button>
+          <button type="button" title="Criar enquete" onClick={() => setShowPoll(true)} className="text-holz-mute hover:text-holz-500"><span className="text-lg">📊</span></button>
+          <button title="Enviar" className="btn h-11 bg-holz-500 text-holz-onaccent hover:bg-holz-600"><Icon name="send" size={18} /></button>
         </form>
       </div>
 
@@ -203,7 +252,7 @@ export default function Chat({ channel, userId, username, canModerate = false }:
             <form onSubmit={search} className="mb-3 flex gap-2">
               <input autoFocus value={query} onChange={e => setQuery(e.target.value)} placeholder="Buscar neste canal"
                 className="min-w-0 flex-1 rounded-leafsm border border-holz-line bg-holz-200 px-2 py-1.5 outline-none focus:border-holz-500" />
-              <button className="btn bg-holz-500 px-3 text-holz-rail"><Icon name="search" size={16} /></button>
+              <button className="btn bg-holz-500 px-3 text-holz-onaccent"><Icon name="search" size={16} /></button>
             </form>
           )}
           <p className="mb-2 font-mono text-[11px] uppercase tracking-widest text-holz-mute">{panel === 'pins' ? 'mensagens fixadas' : 'resultados'}</p>
@@ -217,6 +266,7 @@ export default function Chat({ channel, userId, username, canModerate = false }:
           {((panel === 'pins' && !pins.length) || (panel === 'search' && results && !results.length)) && <p className="text-sm text-holz-mute">Nada por aqui.</p>}
         </aside>
       )}
+      {showPoll && <PollDialog channelId={channel.id} onClose={() => setShowPoll(false)} />}
     </div>
   )
 }

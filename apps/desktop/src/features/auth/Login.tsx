@@ -29,7 +29,7 @@ export default function Login() {
         {mode !== 'name' && <input className={input} type="email" placeholder="E-mail" value={email} onChange={e => setEmail(e.target.value)} required />}
         {mode !== 'name' && <input className={input} type="password" placeholder="Senha" value={password} onChange={e => setPassword(e.target.value)} required minLength={6} />}
         {err && <p className="text-sm text-holz-coral">{err}</p>}
-        <button disabled={busy} className="btn w-full justify-center bg-holz-500 text-holz-rail hover:bg-holz-600 disabled:opacity-60"><Icon name="leaf" size={18} />{mode === 'name' ? 'Entrar' : mode === 'in' ? 'Entrar' : 'Registrar'}</button>
+        <button disabled={busy} className="btn w-full justify-center bg-holz-500 text-holz-onaccent hover:bg-holz-600 disabled:opacity-60"><Icon name="leaf" size={18} />{mode === 'name' ? 'Entrar' : mode === 'in' ? 'Entrar' : 'Registrar'}</button>
         <button type="button" className="text-sm text-holz-500" onClick={() => setMode(mode === 'name' ? 'in' : 'name')}>
           {mode === 'name' ? 'Prefiro entrar com e-mail e senha' : 'Entrar só com nome (sem senha)'}
         </button>

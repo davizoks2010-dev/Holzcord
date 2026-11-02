@@ -13,10 +13,11 @@ Legenda: ✅ pronto · 🔨 em desenvolvimento · 📅 planejado · 🚫 fora de
 | Fixar mensagens (pins) | ✅ |
 | Buscar mensagens no canal | ✅ |
 | Indicador de mensagens não lidas por canal | ✅ |
-| Blocos de código, spoilers, citações, listas | 📅 |
-| Encaminhar mensagem, threads/tópicos, enquetes | 📅 |
+| Blocos de código, spoilers, citações, listas | ✅ |
+| Enquetes | ✅ |
+| Encaminhar mensagem, threads/tópicos | 📅 |
 | Pré-visualização de links (embeds) | 📅 (precisa de serviço externo) |
-| GIFs e stickers | 📅 (APIs gratuitas têm limites) |
+| GIFs e stickers | 📅 (precisa de chave de API do Tenor/Giphy) |
 
 ## Servidores
 | Função | Status |
@@ -24,10 +25,13 @@ Legenda: ✅ pronto · 🔨 em desenvolvimento · 📅 planejado · 🚫 fora de
 | Criar, entrar por convite, sair, listar | ✅ |
 | Cargos com hierarquia e permissões; expulsar | ✅ |
 | Renomear, regenerar convite, apagar servidor | ✅ |
-| Categorias de canais, reordenar canais | 📅 |
-| Canais privados por cargo | 📅 |
-| Banimento, timeout, log de auditoria | 📅 |
-| Ícone do servidor, convites com validade/limite | 📅 |
+| Categorias de canais | ✅ |
+| Reordenar canais/categorias por arrastar | 📅 |
+| Modo lento e tópico do canal | ✅ |
+| Canais privados por cargo | ✅ |
+| Banimento, timeout, log de auditoria | ✅ |
+| Ícone do servidor | ✅ |
+| Convites com validade/limite de usos | 📅 |
 | Emojis personalizados, boost, descoberta de servidores | 🚫 exige infraestrutura/pagamentos |
 | Canais de anúncio e Stage | 📅 |
 
@@ -36,16 +40,17 @@ Legenda: ✅ pronto · 🔨 em desenvolvimento · 📅 planejado · 🚫 fora de
 |---|---|
 | Mensagens diretas 1:1 | ✅ |
 | Perfil: avatar, "sobre mim", status (online/ausente/não perturbe/invisível) | ✅ |
-| Lista de amigos, pedidos, bloquear | 📅 |
-| DMs em grupo, chamadas de voz em DM | 📅 |
+| Lista de amigos, pedidos, bloquear | ✅ |
+| DMs em grupo | ✅ |
+| Chamadas de voz/vídeo em DM | 📅 |
 
 ## Voz e vídeo
 | Função | Status |
 |---|---|
 | Canais de voz, câmera, compartilhar tela (precisa publicar a função LiveKit) | ✅ (código pronto) |
-| Mutar/ensurdecer, escolher dispositivos, volume por usuário | 📅 |
-| Push-to-talk configurável, supressão de ruído avançada | 📅 |
-| Transmissão (Go Live) com qualidade ajustável | 📅 |
+| Mutar/ensurdecer, escolher dispositivos, volume por usuário | ✅ |
+| Push-to-talk configurável, supressão de ruído avançada | ✅ |
+| Transmissão (Go Live) com qualidade ajustável | ✅ |
 | Efeitos de vídeo / fundo virtual | 📅 |
 
 ## Aplicativo
@@ -53,10 +58,10 @@ Legenda: ✅ pronto · 🔨 em desenvolvimento · 📅 planejado · 🚫 fora de
 |---|---|
 | Instalador Windows, atualização automática | ✅ |
 | Notificações nativas (menções e DMs) | ✅ |
-| Configurações do usuário (conta, aparência, áudio, atalhos) | 📅 |
-| Temas claro/escuro | 📅 |
+| Configurações do usuário (conta, aparência, áudio, atalhos) | ✅ |
+| Temas claro/escuro | ✅ |
 | Login com e-mail/senha ou só nome | ✅ |
-| Autenticação em dois fatores, login social | 📅 |
+| Autenticação em dois fatores, login social | 📅 (configuração no painel do Supabase) |
 | macOS / Linux / celular | 📅 / 📅 / 🚫 apps nativos são outro projeto |
 
 ## Plataforma

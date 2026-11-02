@@ -10,6 +10,14 @@ describe('renderMarkdown', () => {
   it('nao injeta HTML pela mencao', () => expect(renderMarkdown('@<img src=x>')).not.toContain('<img'))
 })
 
+describe('formatacao extra', () => {
+  it('spoiler', () => expect(renderMarkdown('||segredo||')).toContain('spoiler'))
+  it('riscado e sublinhado', () => { expect(renderMarkdown('~~a~~')).toBe('<s>a</s>'); expect(renderMarkdown('__a__')).toBe('<u>a</u>') })
+  it('citacao', () => expect(renderMarkdown('> texto')).toContain('<blockquote'))
+  it('lista', () => expect(renderMarkdown('- item')).toContain('• item'))
+  it('citacao nao permite HTML', () => expect(renderMarkdown('> <b>x</b>')).not.toContain('<b>'))
+})
+
 describe('mentionsUser', () => {
   it('detecta mencao direta, sem diferenciar maiusculas', () => expect(mentionsUser('oi @Ana', 'ana')).toBe(true))
   it('detecta @everyone', () => expect(mentionsUser('@everyone reuniao', 'bia')).toBe(true))

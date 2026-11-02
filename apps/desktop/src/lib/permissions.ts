@@ -5,7 +5,10 @@ export const PERMS = [
   { key: 'manage_roles', label: 'Gerenciar cargos', hint: 'Criar cargos e atribuí-los a quem está abaixo' },
   { key: 'manage_messages', label: 'Gerenciar mensagens', hint: 'Apagar mensagens de outros' },
   { key: 'kick_members', label: 'Expulsar membros', hint: 'Remover quem está abaixo do seu cargo' },
-  { key: 'manage_server', label: 'Gerenciar servidor', hint: 'Alterar dados do servidor' }
+  { key: 'manage_server', label: 'Gerenciar servidor', hint: 'Alterar nome, ícone e convite do servidor' },
+  { key: 'ban_members', label: 'Banir membros', hint: 'Banir e desbanir quem está abaixo do seu cargo' },
+  { key: 'moderate_members', label: 'Silenciar membros', hint: 'Aplicar timeout em quem está abaixo do seu cargo' },
+  { key: 'view_audit_log', label: 'Ver log de auditoria', hint: 'Ver o histórico de ações de moderação' }
 ] as const
 export type PermKey = (typeof PERMS)[number]['key']
 export const OWNER_POSITION = 1000
@@ -33,3 +36,6 @@ export function groupByRole(roles: Role[], members: Member[], server: Server) {
   if (orphans.length) groups.push({ role: { id: 'none', server_id: server.id, name: 'Sem cargo', color: '#8E9A92', position: -1, perms: [] }, members: orphans })
   return groups.filter(g => g.members.length)
 }
+
+/** Cor de cargo legivel nos dois temas (no claro, escurece a cor escolhida). */
+export const roleColor = (hex: string) => `color-mix(in srgb, ${hex} var(--role-mix), black)`

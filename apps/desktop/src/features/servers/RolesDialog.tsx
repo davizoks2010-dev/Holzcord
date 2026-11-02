@@ -80,7 +80,7 @@ export default function RolesDialog({ server, roles, myPos, myPerms, onClose }: 
               const allowed = myPerms.includes(p.key)
               return (
                 <label key={p.key} className={`flex items-start gap-3 rounded-leafsm border border-holz-line p-2.5 ${editable && allowed ? 'cursor-pointer' : 'opacity-50'}`}>
-                  <input type="checkbox" disabled={!editable || !allowed} checked={cur.perms.includes(p.key)} onChange={() => toggle(p.key)} className="mt-1 accent-[#C8F169]" />
+                  <input type="checkbox" disabled={!editable || !allowed} checked={cur.perms.includes(p.key)} onChange={() => toggle(p.key)} className="mt-1 accent-holz-500" />
                   <span><b>{p.label}</b><br /><span className="text-xs text-holz-mute">{allowed ? p.hint : 'Você não tem esta permissão para conceder'}</span></span>
                 </label>
               )
@@ -92,7 +92,7 @@ export default function RolesDialog({ server, roles, myPos, myPerms, onClose }: 
                 <button title="Descer na hierarquia" onClick={() => move(-1)} className="btn border border-holz-line px-3">↓</button>
                 <span className="flex-1" />
                 <button onClick={remove} className="px-3 text-holz-coral">Apagar</button>
-                <button onClick={save} className="btn bg-holz-500 text-holz-rail">Salvar</button>
+                <button onClick={save} className="btn bg-holz-500 text-holz-onaccent">Salvar</button>
               </div>
             )}
             {!editable && <p className="text-sm text-holz-mute">Você só pode editar cargos abaixo do seu na hierarquia.</p>}
