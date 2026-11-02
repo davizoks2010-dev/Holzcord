@@ -71,9 +71,9 @@ begin
   return sid;
 end $$;
 -- perfil automatico no cadastro
-create function handle_new_user() returns trigger language plpgsql security definer as $$
+create function handle_new_user() returns trigger language plpgsql security definer set search_path = public as $$
 begin
-  insert into profiles(id, username) values (new.id, coalesce(new.raw_user_meta_data->>'username', split_part(new.email,'@',1)));
+  insert into public.profiles(id, username) values (new.id, coalesce(new.raw_user_meta_data->>'username', split_part(new.email,'@',1)));
   return new;
 end $$;
 create trigger on_auth_user_created after insert on auth.users for each row execute function handle_new_user();
