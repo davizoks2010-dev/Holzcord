@@ -32,3 +32,6 @@ Crie uma tag `v*` (ex.: `v0.1.0`): o workflow *Release* compila no Windows e pub
 
 ## Cargos, hierarquia e canais (migração 0003)
 Execute também `supabase/migrations/0003_cargos_e_canais.sql` no SQL Editor (depois de 0001 e 0002). Servidores já criados ganham os cargos Dono, Admin e Membro automaticamente.
+
+## Lote v0.2 (DMs, reações, fixadas, perfil, não lidas, configurações do servidor)
+Execute `supabase/migrations/0004_dms_reacoes_perfil.sql` no SQL Editor (depois de 0001, 0002 e 0003).
