@@ -26,4 +26,5 @@ jobs:
         env: { GH_TOKEN: '${{ secrets.GITHUB_TOKEN }}' }
         run: |
           V=$(node -p "require('./apps/desktop/package.json').version")
-          gh release create "v$V-build${{ github.run_number }}" apps/desktop/release/*.exe apps/desktop/release/latest.yml --title "Holzcord $V" --notes "Instalador Windows" || true
+          FILES="apps/desktop/release/*.exe apps/desktop/release/*.blockmap apps/desktop/release/latest.yml"
+          gh release create "v$V" $FILES --title "Holzcord $V" --notes "Instalador Windows" --latest || gh release upload "v$V" $FILES --clobber
