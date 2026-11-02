@@ -8,7 +8,7 @@ let pendingScreenResolve: ((id: string | null) => void) | null = null
 function createWindow() {
   win = new BrowserWindow({
     width: 1280, height: 800, minWidth: 940, minHeight: 560,
-    backgroundColor: '#0D0E12', title: 'Holzcord', icon: path.join(__dirname, '../build/icon.png'),
+    backgroundColor: '#090C0A', title: 'Holzcord', icon: path.join(__dirname, '../build/icon.png'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true, nodeIntegration: false, sandbox: true

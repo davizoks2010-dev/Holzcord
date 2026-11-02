@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { supabase, type Channel, type Message } from '../../lib/supabase'
 import { renderMarkdown } from '../../lib/format'
+import Icon from '../../components/Icon'
 
 const SELECT = '*, profiles(username)'
 
@@ -23,7 +24,7 @@ export default function Chat({ channel, userId }: { channel: Channel; userId: st
         }).subscribe()
     return () => { supabase.removeChannel(sub) }
   }, [channel.id])
-  useEffect(() => bottom.current?.scrollIntoView(), [msgs])
+  useEffect(() => { bottom.current?.scrollIntoView() }, [msgs])
 
   async function send(e: React.FormEvent) {
     e.preventDefault()
@@ -41,31 +42,40 @@ export default function Chat({ channel, userId }: { channel: Channel; userId: st
 
   return (
     <div className="flex h-full flex-col">
-      <header className="p-3 font-semibold border-b border-holz-line"># {channel.name}</header>
-      <div className="flex-1 overflow-y-auto p-4 space-y-3">
-        {msgs.map(m => (
-          <div key={m.id} className="group">
-            <span className="font-semibold text-holz-500">{m.profiles?.username ?? 'usuário'}</span>
-            <span className="ml-2 text-xs text-holz-mute">{new Date(m.created_at).toLocaleString()}</span>
-            {m.author_id === userId && (
-              <button className="ml-2 hidden text-xs text-coral group-hover:inline"
-                onClick={() => supabase.from('messages').delete().eq('id', m.id)}>apagar</button>
-            )}
-            {m.attachment_url
-              ? /\.(png|jpe?g|gif|webp)$/i.test(m.attachment_url)
-                ? <img src={m.attachment_url} className="mt-1 max-h-72 rounded" />
-                : <a className="block text-holz-500 underline" target="_blank" rel="noreferrer noopener" href={m.attachment_url}>{m.content}</a>
-              : <div className="whitespace-pre-wrap break-words" dangerouslySetInnerHTML={{ __html: renderMarkdown(m.content) }} />}
-          </div>
-        ))}
+      <header className="flex items-center gap-2 border-b border-holz-line p-4 font-display text-lg font-semibold">
+        <Icon name="text" className="text-holz-500" /> {channel.name}
+      </header>
+      <div className="flex-1 space-y-3 overflow-y-auto p-5">
+        {msgs.map(m => {
+          const mine = m.author_id === userId
+          return (
+            <div key={m.id} className={`group flex ${mine ? 'justify-end' : ''}`}>
+              <div className={`max-w-[75%] border border-holz-line px-4 py-2.5 ${mine ? 'rounded-petalme bg-holz-200' : 'rounded-petal bg-holz-100'}`}>
+                <div className="mb-0.5 flex items-baseline gap-2">
+                  <span className={`font-display font-semibold ${mine ? 'text-holz-500' : 'text-holz-live'}`}>{m.profiles?.username ?? 'usuário'}</span>
+                  <span className="font-mono text-[11px] text-holz-mute">{new Date(m.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                  {mine && (
+                    <button className="hidden text-xs text-holz-coral group-hover:inline" onClick={() => supabase.from('messages').delete().eq('id', m.id)}>apagar</button>
+                  )}
+                </div>
+                {m.attachment_url
+                  ? /\.(png|jpe?g|gif|webp)$/i.test(m.attachment_url)
+                    ? <img src={m.attachment_url} className="mt-1 max-h-72 rounded-leafsm" />
+                    : <a className="flex items-center gap-1.5 text-holz-500 underline" target="_blank" rel="noreferrer noopener" href={m.attachment_url}><Icon name="clip" size={16} />{m.content}</a>
+                  : <div className="whitespace-pre-wrap break-words" dangerouslySetInnerHTML={{ __html: renderMarkdown(m.content) }} />}
+              </div>
+            </div>
+          )
+        })}
         <div ref={bottom} />
       </div>
-      <form onSubmit={send} className="flex gap-2 p-4">
-        <label className="grid h-10 w-10 cursor-pointer place-items-center rounded bg-holz-200">+
-          <input type="file" hidden onChange={e => e.target.files?.[0] && upload(e.target.files[0])} />
+      <form onSubmit={send} className="flex items-center gap-2 p-4">
+        <label title="Anexar" className="pebble grid h-11 w-11 cursor-pointer place-items-center bg-holz-200 text-holz-mute hover:text-holz-500">
+          <Icon name="clip" /><input type="file" hidden onChange={e => e.target.files?.[0] && upload(e.target.files[0])} />
         </label>
-        <input value={text} onChange={e => setText(e.target.value)} placeholder={`Conversar em #${channel.name}`}
-          className="flex-1 rounded bg-holz-200 px-3 outline-none" />
+        <input value={text} onChange={e => setText(e.target.value)} placeholder={`Conversar em ${channel.name}`}
+          className="h-11 flex-1 rounded-leaf border border-holz-line bg-holz-100 px-4 outline-none focus:border-holz-500" />
+        <button title="Enviar" className="btn h-11 bg-holz-500 text-holz-rail hover:bg-holz-600"><Icon name="send" size={18} /></button>
       </form>
     </div>
   )

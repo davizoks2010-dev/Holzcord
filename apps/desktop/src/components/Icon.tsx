@@ -1,0 +1,27 @@
+// Conjunto de icones proprio do Holzcord: traco grosso, pontas arredondadas, curvas levemente irregulares.
+const P = {
+  text: 'M9.2 3.5 7.6 20.5M16.4 3.2 14.7 20.8M3.8 9.2c5.4-.9 11.2-.7 16.4.3M3.4 15.1c5.6-.8 11-.6 16.2.2',
+  voice: 'M3.6 10.2v3.8c1.4-.2 2.4 0 3.4.6L12 18.4V5.7L7 9.5c-1 .6-2 .8-3.4.7ZM15.8 9c1.4 1.5 1.4 4.5 0 6M18.8 6.2c2.7 3.1 2.7 8.5 0 11.6',
+  mic: 'M9 4.6a3 3 0 0 1 6 0v6.8a3 3 0 0 1-6 0ZM5.2 11c.2 3.7 2.9 6.2 6.8 6.2s6.6-2.5 6.8-6.2M12 17.4v3.2',
+  micoff: 'M9 5V4.6a3 3 0 0 1 6 0v6.8M9 9v2.4a3 3 0 0 0 4.4 2.6M5.2 11c.2 3.7 2.9 6.2 6.8 6.2M12 17.4v3.2M3.8 3.6l16.6 16.8',
+  cam: 'M3.4 8.6c0-1.2.9-2 2.1-2h7.6c1.2 0 2.1.8 2.1 2v6.8c0 1.2-.9 2-2.1 2H5.5c-1.2 0-2.1-.8-2.1-2ZM15.2 11.2l5.4-3v7.6l-5.4-3',
+  camoff: 'M3.4 8.6c0-1.2.9-2 2.1-2h5.6M15.2 10v5.4c0 1.2-.9 2-2.1 2H5.5c-1.2 0-2.1-.8-2.1-2V9.6M15.2 11.2l5.4-3v7.6M3.8 3.6l16.6 16.8',
+  screen: 'M3.2 6.4c0-.9.7-1.6 1.6-1.6h14.4c.9 0 1.6.7 1.6 1.6v9c0 .9-.7 1.6-1.6 1.6H4.8c-.9 0-1.6-.7-1.6-1.6ZM8.2 20.2h7.6M12 17v3.2M12 13.4V8.2M9.6 10.4 12 8l2.4 2.4',
+  plus: 'M12 4.8v14.4M4.8 12h14.4',
+  clip: 'M19.8 11.2 12 19a4.8 4.8 0 0 1-6.8-6.8l8-8a3.2 3.2 0 0 1 4.6 4.6l-8 8a1.6 1.6 0 0 1-2.3-2.3l7.4-7.4',
+  send: 'M4 11.6 20 4.2 14.6 20 11.4 13.2Z',
+  out: 'M10 4.6H5.4v14.8H10M14.6 8l4 4-4 4M18.6 12H9.2',
+  join: 'M4.4 12h11.2M11.6 7l5 5-5 5M20 4.6v14.8',
+  link: 'M10.2 14a4 4 0 0 0 5.6 0l3-3a4 4 0 0 0-5.6-5.6l-1 1M13.8 10a4 4 0 0 0-5.6 0l-3 3a4 4 0 0 0 5.6 5.6l1-1',
+  leaf: 'M5 19c0-8 5-14 15-14 0 10-6 15-14 15M5 19c3-5 6-8 10-10'
+} as const
+export type IconName = keyof typeof P
+
+export default function Icon({ name, size = 20, className = '' }: { name: IconName; size?: number; className?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"
+      strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      <path d={P[name]} />
+    </svg>
+  )
+}

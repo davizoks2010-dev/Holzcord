@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Room, RoomEvent, Track, type Participant } from 'livekit-client'
 import { supabase, type Channel } from '../../lib/supabase'
+import Icon from '../../components/Icon'
 
 interface Source { id: string; name: string; thumbnail: string }
 
@@ -12,9 +13,9 @@ function Tile({ p, source }: { p: Participant; source: Track.Source }) {
     return () => { pub?.track?.detach(ref.current!) }
   })
   return (
-    <div className={`relative overflow-hidden rounded-lg bg-black ${p.isSpeaking ? 'ring-2 ring-holz-live' : ''}`}>
+    <div className={`relative overflow-hidden rounded-leaf bg-black ${p.isSpeaking ? 'ring-2 ring-holz-live' : 'border border-holz-line'}`}>
       <video ref={ref} autoPlay playsInline muted={p.isLocal} className="h-full w-full object-contain" />
-      <span className="absolute bottom-1 left-2 rounded bg-black/60 px-2 text-sm">
+      <span className="absolute bottom-2 left-2 rounded-leafsm bg-black/60 px-2.5 py-0.5 font-mono text-xs">
         {p.name}{source === Track.Source.ScreenShare ? ' (tela)' : ''}
       </span>
     </div>
@@ -54,36 +55,38 @@ export default function VoiceRoom({ channel }: { channel: Channel }) {
       .catch(() => {})
   function pick(id: string | null) { window.holz?.chooseScreen(id); setSources(null) }
 
-  const btn = (on: boolean) => `rounded px-4 py-2 font-medium ${on ? 'bg-holz-500 text-holz-rail' : 'bg-holz-200'}`
+  const btn = (on: boolean) => `btn ${on ? 'bg-holz-500 text-holz-rail' : 'bg-holz-200 text-holz-900 border border-holz-line'}`
   return (
     <div className="flex h-full flex-col">
-      <header className="p-3 font-semibold border-b border-holz-line">🔊 {channel.name}</header>
-      {state === 'connecting' && <p className="p-4 text-holz-mute">Conectando…</p>}
-      {state === 'error' && <p className="p-4 text-coral">Falha ao conectar: {err}</p>}
-      <div className="grid flex-1 auto-rows-fr grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-2 p-4">
+      <header className="flex items-center gap-2 border-b border-holz-line p-4 font-display text-lg font-semibold">
+        <Icon name="voice" className="text-holz-500" /> {channel.name}
+      </header>
+      {state === 'connecting' && <p className="p-4 font-mono text-sm text-holz-mute">conectando…</p>}
+      {state === 'error' && <p className="p-4 text-holz-coral">Falha ao conectar: {err}</p>}
+      <div className="grid flex-1 auto-rows-fr grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-3 p-5">
         {parts.map(p => <Tile key={p.identity + 'cam'} p={p} source={Track.Source.Camera} />)}
         {parts.filter(p => p.isScreenShareEnabled).map(p => <Tile key={p.identity + 'scr'} p={p} source={Track.Source.ScreenShare} />)}
       </div>
-      <div className="flex justify-center gap-3 p-4">
+      <div className="flex justify-center gap-3 p-5">
         <button className={btn(lp.isMicrophoneEnabled)} onClick={() => lp.setMicrophoneEnabled(!lp.isMicrophoneEnabled)}>
-          {lp.isMicrophoneEnabled ? '🎤 Mudo' : '🔇 Ativar mic'}</button>
+          <Icon name={lp.isMicrophoneEnabled ? 'mic' : 'micoff'} />{lp.isMicrophoneEnabled ? 'Mic ligado' : 'Mic mudo'}</button>
         <button className={btn(lp.isCameraEnabled)} onClick={() => lp.setCameraEnabled(!lp.isCameraEnabled)}>
-          {lp.isCameraEnabled ? '📷 Desligar câmera' : '📷 Ligar câmera'}</button>
+          <Icon name={lp.isCameraEnabled ? 'cam' : 'camoff'} />{lp.isCameraEnabled ? 'Câmera ligada' : 'Câmera'}</button>
         <button className={btn(lp.isScreenShareEnabled)} onClick={toggleScreen}>
-          {lp.isScreenShareEnabled ? '🖥 Parar tela' : '🖥 Compartilhar tela'}</button>
+          <Icon name="screen" />{lp.isScreenShareEnabled ? 'Parar tela' : 'Compartilhar tela'}</button>
       </div>
       {sources && (
-        <div className="fixed inset-0 grid place-items-center bg-black/60">
-          <div className="max-h-[80vh] w-[760px] overflow-y-auto rounded-lg bg-holz-100 p-4">
-            <h2 className="mb-3 font-semibold">Escolha o que compartilhar</h2>
+        <div className="fixed inset-0 grid place-items-center bg-black/70">
+          <div className="max-h-[80vh] w-[760px] overflow-y-auto rounded-[30px_8px_30px_8px] border border-holz-line bg-holz-100 p-6">
+            <h2 className="mb-4 font-display text-xl font-semibold">Escolha o que compartilhar</h2>
             <div className="grid grid-cols-3 gap-3">
               {sources.map(s => (
-                <button key={s.id} onClick={() => pick(s.id)} className="rounded bg-holz-200 p-2 hover:ring-2 hover:ring-holz-500">
-                  <img src={s.thumbnail} className="w-full rounded" /><p className="mt-1 truncate text-xs">{s.name}</p>
+                <button key={s.id} onClick={() => pick(s.id)} className="rounded-leafsm border border-holz-line bg-holz-50 p-2 hover:border-holz-500">
+                  <img src={s.thumbnail} className="w-full rounded-leafsm" /><p className="mt-1 truncate font-mono text-xs">{s.name}</p>
                 </button>
               ))}
             </div>
-            <button className="mt-3 text-sm text-holz-mute" onClick={() => pick(null)}>Cancelar</button>
+            <button className="mt-4 text-sm text-holz-mute" onClick={() => pick(null)}>Cancelar</button>
           </div>
         </div>
       )}
