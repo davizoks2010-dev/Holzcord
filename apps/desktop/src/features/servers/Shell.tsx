@@ -71,7 +71,7 @@ export default function Shell({ session }: { session: Session }) {
           ))}
         </div>
         <footer className="flex items-center justify-between border-t border-holz-line p-3 text-sm">
-          <span className="truncate font-mono text-xs text-holz-mute">{session.user.email}</span>
+          <span className="truncate font-mono text-xs text-holz-mute">{(session.user.user_metadata?.username as string) ?? session.user.email}</span>
           <button title="Sair" onClick={() => supabase.auth.signOut()} className="text-holz-coral"><Icon name="out" size={18} /></button>
         </footer>
       </aside>

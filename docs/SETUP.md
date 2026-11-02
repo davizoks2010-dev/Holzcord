@@ -21,3 +21,11 @@ Para remover limites, hospede Supabase e LiveKit você mesmo (open source) e tro
 ## Atalhos para Windows
 - `configurar-backend.bat`: publica a função de voz e grava os segredos do LiveKit no Supabase (depois de rodar o SQL).
 - `iniciar.bat`: cria o `.env`, instala dependências e abre o app.
+
+## Login sem senha (só com nome de usuário)
+1. Supabase → **SQL Editor**: execute também `supabase/migrations/0002_login_sem_senha.sql`.
+2. Supabase → **Authentication** → **Sign In / Providers** → ative **Allow anonymous sign-ins**.
+3. Na primeira execução o app pede a chave anon/publishable do Supabase e a guarda localmente (a URL já vem preenchida).
+
+## Instalador (.exe)
+Crie uma tag `v*` (ex.: `v0.1.0`): o workflow *Release* compila no Windows e publica o instalador na aba **Releases** do GitHub. Nenhum secret é necessário.
