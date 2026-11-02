@@ -17,3 +17,7 @@
 ## Limites dos planos gratuitos
 Supabase: 500 MB de banco, 1 GB de arquivos, projeto pausa após inatividade. LiveKit: cota mensal de minutos WebRTC.
 Para remover limites, hospede Supabase e LiveKit você mesmo (open source) e troque as variáveis.
+
+## Atalhos para Windows
+- `configurar-backend.bat`: publica a função de voz e grava os segredos do LiveKit no Supabase (depois de rodar o SQL).
+- `iniciar.bat`: cria o `.env`, instala dependências e abre o app.
