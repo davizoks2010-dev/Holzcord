@@ -7,6 +7,7 @@ win:
   target: [{ target: nsis, arch: [x64] }]
   icon: build/icon.ico
 nsis:
+  artifactName: Holzcord-Setup-${version}.${ext}
   oneClick: false
   perMachine: false
   allowToChangeInstallationDirectory: true
