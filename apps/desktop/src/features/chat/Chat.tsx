@@ -5,7 +5,14 @@ import Icon from '../../components/Icon'
 
 const SELECT = '*, profiles(username)'
 
-export default function Chat({ channel, userId }: { channel: Channel; userId: string }) {
+export default function Chat({ channel, userId, canModerate = false }: { channel: Channel; userId: string; canModerate?: boolean }) {
+  const [editId, setEditId] = useState<string | null>(null)
+  const [editText, setEditText] = useState('')
+  async function saveEdit() {
+    const content = editText.trim()
+    if (editId && content) await supabase.from('messages').update({ content, edited_at: new Date().toISOString() }).eq('id', editId)
+    setEditId(null)
+  }
   const [msgs, setMsgs] = useState<Message[]>([])
   const [text, setText] = useState('')
   const bottom = useRef<HTMLDivElement>(null)
@@ -54,7 +61,10 @@ export default function Chat({ channel, userId }: { channel: Channel; userId: st
                 <div className="mb-0.5 flex items-baseline gap-2">
                   <span className={`font-display font-semibold ${mine ? 'text-holz-500' : 'text-holz-live'}`}>{m.profiles?.username ?? 'usuário'}</span>
                   <span className="font-mono text-[11px] text-holz-mute">{new Date(m.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                  {mine && (
+                  {mine && !m.attachment_url && (
+                    <button className="hidden text-xs text-holz-mute group-hover:inline" onClick={() => { setEditId(m.id); setEditText(m.content) }}>editar</button>
+                  )}
+                  {(mine || canModerate) && (
                     <button className="hidden text-xs text-holz-coral group-hover:inline" onClick={() => supabase.from('messages').delete().eq('id', m.id)}>apagar</button>
                   )}
                 </div>
@@ -62,7 +72,14 @@ export default function Chat({ channel, userId }: { channel: Channel; userId: st
                   ? /\.(png|jpe?g|gif|webp)$/i.test(m.attachment_url)
                     ? <img src={m.attachment_url} className="mt-1 max-h-72 rounded-leafsm" />
                     : <a className="flex items-center gap-1.5 text-holz-500 underline" target="_blank" rel="noreferrer noopener" href={m.attachment_url}><Icon name="clip" size={16} />{m.content}</a>
-                  : <div className="whitespace-pre-wrap break-words" dangerouslySetInnerHTML={{ __html: renderMarkdown(m.content) }} />}
+                  : editId === m.id
+                    ? <input autoFocus value={editText} onChange={e => setEditText(e.target.value)}
+                        onKeyDown={e => { if (e.key === 'Enter') saveEdit(); if (e.key === 'Escape') setEditId(null) }}
+                        className="w-full rounded-leafsm border border-holz-500 bg-holz-rail px-2 py-1 outline-none" />
+                    : <div className="whitespace-pre-wrap break-words">
+                        <span dangerouslySetInnerHTML={{ __html: renderMarkdown(m.content) }} />
+                        {m.edited_at && <span className="ml-1 font-mono text-[10px] text-holz-mute">(editada)</span>}
+                      </div>}
               </div>
             </div>
           )

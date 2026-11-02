@@ -12,9 +12,11 @@ export function saveSupabaseConfig(url: string, key: string) {
 
 export const supabase = createClient(sbUrl, sbKey ?? 'missing-key')
 
-export interface Server { id: string; name: string; invite_code: string }
+export interface Server { id: string; name: string; invite_code: string; owner_id: string }
+export interface Role { id: string; server_id: string; name: string; color: string; position: number; perms: string[] }
+export interface Member { server_id: string; user_id: string; role_id: string | null; profiles: { username: string } | null }
 export interface Channel { id: string; server_id: string; name: string; type: 'text' | 'voice' }
 export interface Message {
   id: string; channel_id: string; author_id: string; content: string
-  attachment_url: string | null; created_at: string; profiles?: { username: string } | null
+  attachment_url: string | null; created_at: string; edited_at?: string | null; profiles?: { username: string } | null
 }

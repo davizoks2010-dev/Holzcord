@@ -29,3 +29,6 @@ Para remover limites, hospede Supabase e LiveKit você mesmo (open source) e tro
 
 ## Instalador (.exe)
 Crie uma tag `v*` (ex.: `v0.1.0`): o workflow *Release* compila no Windows e publica o instalador na aba **Releases** do GitHub. Nenhum secret é necessário.
+
+## Cargos, hierarquia e canais (migração 0003)
+Execute também `supabase/migrations/0003_cargos_e_canais.sql` no SQL Editor (depois de 0001 e 0002). Servidores já criados ganham os cargos Dono, Admin e Membro automaticamente.
