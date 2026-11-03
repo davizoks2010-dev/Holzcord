@@ -1,10 +1,12 @@
 import { supabase } from '../../lib/supabase'
 import { useSettings, type Accent } from '../../lib/settings'
 import Modal from '../../components/Modal'
+import { DeviceField, useMediaDevices } from '../voice/devices'
 import { useUpdate } from '../../lib/update'
 
 export default function SettingsDialog({ onClose }: { onClose: () => void }) {
   const s = useSettings()
+  const devs = useMediaDevices()
   const up = useUpdate()
   const upText = { dev: 'Atualizações automáticas funcionam no app instalado.', idle: 'Ainda não verificado.', checking: 'Procurando…', none: 'Você está com a versão mais recente.', available: `Versão ${up.status.version} encontrada.`, downloading: `Baixando… ${up.status.percent ?? 0}%`, ready: `Versão ${up.status.version} pronta para instalar.`, error: 'Não consegui verificar agora. Tente de novo mais tarde.' }[up.status.state]
   const field = 'field'
@@ -34,6 +36,11 @@ export default function SettingsDialog({ onClose }: { onClose: () => void }) {
           <input value={s.giphyKey} onChange={e => s.set({ giphyKey: e.target.value.trim() })} placeholder="Chave gratuita do Giphy (developers.giphy.com)" className={field} /></div>
         <div><p className="mb-1 text-xs font-semibold text-holz-mute">Notificações</p>
           <label className={row}><input type="checkbox" checked={s.notifications} onChange={e => s.set({ notifications: e.target.checked })} className="accent-holz-500" /> Avisar sobre menções e mensagens diretas</label></div>
+        <div className="space-y-2"><p className="text-xs font-semibold text-holz-mute">Microfone e fones</p>
+          <DeviceField label="Microfone" list={devs.audioinput} value={s.micId} onChange={id => s.set({ micId: id })} fallback="Microfone" />
+          <DeviceField label="Fone ou alto-falante" list={devs.audiooutput} value={s.outId} onChange={id => s.set({ outId: id })} fallback="Saída" />
+          <DeviceField label="Câmera" list={devs.videoinput} value={s.camId} onChange={id => s.set({ camId: id })} fallback="Câmera" />
+          <p className="text-xs text-holz-mute">Também dá para trocar durante a chamada, pela engrenagem.</p></div>
         <div className="space-y-1.5"><p className="text-xs font-semibold text-holz-mute">Voz</p>
           <label className={row}><input type="checkbox" checked={s.noiseSuppression} onChange={e => s.set({ noiseSuppression: e.target.checked })} className="accent-holz-500" /> Supressão de ruído</label>
           <label className={row}><input type="checkbox" checked={s.echoCancellation} onChange={e => s.set({ echoCancellation: e.target.checked })} className="accent-holz-500" /> Cancelamento de eco</label>

@@ -1,9 +1,9 @@
 import { create } from 'zustand'
 
 export type Accent = 'terracota' | 'oceano' | 'floresta' | 'violeta' | 'rosa'
-export interface Settings { theme: 'dark' | 'light' | 'system'; accent: Accent; notifications: boolean; ptt: string; noiseSuppression: boolean; echoCancellation: boolean; giphyKey: string }
+export interface Settings { theme: 'dark' | 'light' | 'system'; accent: Accent; notifications: boolean; ptt: string; noiseSuppression: boolean; echoCancellation: boolean; giphyKey: string; micId: string; outId: string; camId: string }
 const KEY = 'holz.settings'
-const DEFAULTS: Settings = { theme: 'dark', accent: 'terracota', notifications: true, ptt: '', noiseSuppression: true, echoCancellation: true, giphyKey: '' }
+const DEFAULTS: Settings = { theme: 'dark', accent: 'terracota', notifications: true, ptt: '', noiseSuppression: true, echoCancellation: true, giphyKey: '', micId: '', outId: '', camId: '' }
 
 function load(): Settings {
   try { return { ...DEFAULTS, ...JSON.parse(localStorage.getItem(KEY) ?? '{}') } } catch { return DEFAULTS }
