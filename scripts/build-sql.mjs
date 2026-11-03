@@ -1,7 +1,7 @@
 // Junta todas as migracoes em um unico SQL seguro para rodar quantas vezes precisar.
 // Gera: supabase/holzcord-banco-completo.sql  e  apps/desktop/src/assets/schema.sql (usado pelo app).
 import { readdirSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs'
-import { dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 const dir = new URL('../supabase/migrations/', import.meta.url)
 const files = readdirSync(dir).filter(f => /^\d{4}_.*\.sql$/.test(f)).sort()
@@ -17,6 +17,6 @@ for (const f of files) {
 }
 const root = new URL('../', import.meta.url)
 writeFileSync(new URL('supabase/holzcord-banco-completo.sql', root), out)
-mkdirSync(dirname(new URL('apps/desktop/src/assets/', root).pathname), { recursive: true })
+mkdirSync(fileURLToPath(new URL('apps/desktop/src/assets/', root)), { recursive: true })
 writeFileSync(new URL('apps/desktop/src/assets/schema.sql', root), out)
 console.log(`SQL completo gerado com ${files.length} migracoes (${(out.length / 1024).toFixed(0)} KB)`)
