@@ -1,6 +1,7 @@
 import { app, BrowserWindow, desktopCapturer, ipcMain, net, session, shell, Tray, Menu, globalShortcut, nativeImage } from 'electron'
 import path from 'node:path'
 import dns from 'node:dns/promises'
+import { registerUpdateIpc, runLauncher, startPeriodicChecks, checkForUpdates } from './updater'
 import nodeNet from 'node:net'
 
 let win: BrowserWindow | null = null
@@ -95,7 +96,9 @@ function registerPtt(accelerator: string | null) {
 }
 
 app.whenReady().then(async () => {
-  setupPermissions(); setupScreenShare(); createWindow()
+  setupPermissions(); setupScreenShare(); registerUpdateIpc(() => win)
+  const closeLauncher = await runLauncher() // procura e instala atualizacoes antes de abrir
+  createWindow(); closeLauncher()
   ipcMain.handle('ptt:set', (_e, acc: string | null) => registerPtt(acc))
   tray = new Tray(nativeImage.createFromPath(path.join(__dirname, '../build/icon.png')).resize({ width: 16, height: 16 }))
   tray.setToolTip('Holzcord')
@@ -104,11 +107,9 @@ app.whenReady().then(async () => {
     { label: 'Sair', click: () => { (app as any).quitting = true; app.quit() } }
   ]))
   tray.on('click', () => win?.show())
-  if (app.isPackaged) {
-    const { autoUpdater } = await import('electron-updater')
-    autoUpdater.checkForUpdatesAndNotify().catch(() => {})
-  }
+  startPeriodicChecks(20); checkForUpdates()
 })
+app.on('window-all-closed', () => { /* o Holzcord continua na bandeja do sistema */ })
 app.on('before-quit', () => { (app as any).quitting = true })
 app.on('will-quit', () => globalShortcut.unregisterAll())
 const lock = app.requestSingleInstanceLock()

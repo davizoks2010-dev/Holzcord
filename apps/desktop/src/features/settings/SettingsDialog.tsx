@@ -1,9 +1,12 @@
 import { supabase } from '../../lib/supabase'
 import { useSettings, type Accent } from '../../lib/settings'
 import Modal from '../../components/Modal'
+import { useUpdate } from '../../lib/update'
 
 export default function SettingsDialog({ onClose }: { onClose: () => void }) {
   const s = useSettings()
+  const up = useUpdate()
+  const upText = { dev: 'Atualizações automáticas funcionam no app instalado.', idle: 'Ainda não verificado.', checking: 'Procurando…', none: 'Você está com a versão mais recente.', available: `Versão ${up.status.version} encontrada.`, downloading: `Baixando… ${up.status.percent ?? 0}%`, ready: `Versão ${up.status.version} pronta para instalar.`, error: 'Não consegui verificar agora. Tente de novo mais tarde.' }[up.status.state]
   const field = 'field'
   const row = 'flex cursor-pointer items-center gap-2'
   function captureKey(e: React.KeyboardEvent) {
@@ -38,6 +41,12 @@ export default function SettingsDialog({ onClose }: { onClose: () => void }) {
         <div><p className="mb-1 text-xs font-semibold text-holz-mute">Atalho do microfone</p>
           <input readOnly value={s.ptt} onKeyDown={captureKey} placeholder="Clique aqui e aperte uma tecla (Backspace limpa)" className={field} />
           <p className="mt-1 text-xs text-holz-mute">Liga e desliga o microfone mesmo com o app em segundo plano.</p></div>
+        <div><p className="mb-1 text-xs font-semibold text-holz-mute">Atualizações</p>
+          <div className="flex items-center gap-3 rounded-lg border border-holz-line p-3">
+            <div className="flex-1 text-sm"><div className="font-semibold">Versão {up.version || '—'}</div><div className="text-holz-mute">{upText}</div></div>
+            {up.status.state === 'ready' ? <button onClick={up.install} className="btn bg-holz-500 text-holz-onaccent">Reiniciar e atualizar</button>
+              : <button onClick={up.check} disabled={up.status.state === 'dev' || up.status.state === 'checking' || up.status.state === 'downloading'} className="btn border border-holz-line disabled:opacity-40">Procurar agora</button>}
+          </div></div>
         <div className="flex justify-between border-t border-holz-line pt-3">
           <button onClick={() => supabase.auth.signOut()} className="text-holz-coral">Desconectar</button>
           <button onClick={onClose} className="btn bg-holz-500 text-holz-onaccent">Fechar</button>

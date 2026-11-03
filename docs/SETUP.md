@@ -45,3 +45,8 @@ O próprio app avisa quando o banco está desatualizado e tem um botão "Copiar 
 
 ## Chamadas em DM
 Republique a função de voz depois de atualizar: `supabase functions deploy livekit-token`.
+
+## Atualização automática (você instala só uma vez)
+- Ao abrir, o Holzcord mostra uma tela de inicialização que procura, baixa e instala atualizações sozinho.
+- Com o app aberto, ele verifica de novo a cada 20 minutos e mostra "Reiniciar e atualizar" quando há versão nova.
+- A cada envio de código ao GitHub, o workflow gera uma versão nova (0.5.N, o N sobe sozinho) e publica em Releases.

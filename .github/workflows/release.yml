@@ -1,7 +1,11 @@
 name: Release (Windows installer)
 on:
-  push: { tags: ['v*'] }
+  push:
+    branches: [claude/holzcord-app]
+    paths-ignore: ['docs/**', '**.md', 'brand/**']
   workflow_dispatch:
+# se chegar outra alteracao enquanto compila, so a mais nova importa
+concurrency: { group: release, cancel-in-progress: true }
 jobs:
   win:
     runs-on: windows-latest
@@ -12,6 +16,13 @@ jobs:
         with: { node-version: 22, cache: npm }
       - run: npm ci
       - run: npm test
+      - name: Definir a versao automaticamente (maior que a anterior)
+        shell: bash
+        run: |
+          cd apps/desktop
+          BASE=$(node -p "require('./package.json').version.split('.').slice(0,2).join('.')")
+          npm pkg set version="$BASE.${{ github.run_number }}"
+          echo "Versao desta compilacao: $(node -p "require('./package.json').version")"
       - run: npm run build
       - run: npx electron-builder --win --publish never
         working-directory: apps/desktop
