@@ -19,11 +19,11 @@ function Tile({ p, source, volume, onVolume }: { p: Participant; source: Track.S
   })
   const camOn = !!p.getTrackPublication(source)?.track
   return (
-    <div className={`group relative overflow-hidden rounded-leaf bg-black ${p.isSpeaking ? 'ring-2 ring-holz-live' : 'border border-holz-line'}`}>
+    <div className={`group relative overflow-hidden rounded-xl bg-black ${p.isSpeaking ? 'ring-2 ring-holz-live' : 'border border-holz-line'}`}>
       <video ref={ref} autoPlay playsInline muted={p.isLocal} className={`h-full w-full object-contain ${camOn ? '' : 'hidden'}`} />
       {!camOn && <div className="grid h-full min-h-[8rem] place-items-center font-display text-4xl text-holz-mute">{(p.name ?? '?').slice(0, 1).toUpperCase()}</div>}
-      <span className="absolute bottom-2 left-2 rounded-leafsm bg-black/60 px-2.5 py-0.5 font-mono text-xs text-white">
-        {p.name}{source === Track.Source.ScreenShare ? ' (tela)' : ''}{!p.isMicrophoneEnabled && ' 🔇'}
+      <span className="absolute bottom-2 left-2 rounded-lg bg-black/60 px-2.5 py-0.5 text-xs text-white">
+        {p.name}{source === Track.Source.ScreenShare ? ' (tela)' : ''}{!p.isMicrophoneEnabled && <Icon name="micoff" size={12} className="ml-1 inline" />}
       </span>
       {onVolume && source === Track.Source.Camera && (
         <input type="range" min={0} max={1} step={0.05} value={volume ?? 1} title="Volume desta pessoa" onChange={e => onVolume(Number(e.target.value))}
@@ -33,7 +33,7 @@ function Tile({ p, source, volume, onVolume }: { p: Participant; source: Track.S
   )
 }
 
-export default function VoiceRoom({ channel }: { channel: Channel }) {
+export default function VoiceRoom({ channel, onLeave }: { channel: Channel; onLeave?: () => void }) {
   const { noiseSuppression, echoCancellation } = useSettings()
   const [room] = useState(() => new Room({ adaptiveStream: true, dynacast: true, audioCaptureDefaults: { noiseSuppression, echoCancellation, autoGainControl: true } }))
   const [, force] = useState(0)
@@ -88,18 +88,18 @@ export default function VoiceRoom({ channel }: { channel: Channel }) {
     return lp.setScreenShareEnabled(true, { audio: true, resolution: { width, height, frameRate } }).catch(() => {})
   }
   const pick = (id: string | null) => { window.holz?.chooseScreen(id); setSources(null) }
-  const leave = () => useUI.getState().setChannel(null)
+  const leave = () => (onLeave ? onLeave() : useUI.getState().setChannel(null))
   const switchDev = (kind: MediaDeviceKind, id: string) => room.switchActiveDevice(kind, id).catch(e => setErr(String(e)))
 
   const btn = (on: boolean) => `btn ${on ? 'bg-holz-500 text-holz-onaccent' : 'bg-holz-200 text-holz-900 border border-holz-line'}`
-  const sel = 'w-full rounded-leafsm border border-holz-line bg-holz-200 p-1.5 text-sm'
+  const sel = 'w-full rounded-lg border border-holz-line bg-holz-200 p-1.5 text-sm'
   return (
     <div className="flex h-full flex-col">
       <header className="flex items-center gap-2 border-b border-holz-line p-4 font-display text-lg font-semibold">
         <Icon name="voice" className="text-holz-500" /> <span className="flex-1">{channel.name}</span>
         <button title="Configurações de voz" onClick={() => setShowCfg(v => !v)} className={showCfg ? 'text-holz-500' : 'text-holz-mute hover:text-holz-500'}><Icon name="gear" /></button>
       </header>
-      {state === 'connecting' && <p className="p-4 font-mono text-sm text-holz-mute">conectando…</p>}
+      {state === 'connecting' && <p className="p-4 text-sm text-holz-mute">conectando…</p>}
       {err && <p className="p-4 text-holz-coral">{state === 'error' ? 'Falha ao conectar: ' : ''}{err}</p>}
       {showCfg && (
         <div className="grid grid-cols-2 gap-3 border-b border-holz-line bg-holz-100 p-4 md:grid-cols-4">
@@ -126,12 +126,12 @@ export default function VoiceRoom({ channel }: { channel: Channel }) {
       </div>
       {sources && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/70">
-          <div className="max-h-[80vh] w-[760px] overflow-y-auto rounded-[30px_8px_30px_8px] border border-holz-line bg-holz-100 p-6">
+          <div className="max-h-[80vh] w-[760px] overflow-y-auto rounded-2xl border border-holz-line bg-holz-100 p-6">
             <h2 className="mb-4 font-display text-xl font-semibold">Escolha o que compartilhar</h2>
             <div className="grid grid-cols-3 gap-3">
               {sources.map(s => (
-                <button key={s.id} onClick={() => pick(s.id)} className="rounded-leafsm border border-holz-line bg-holz-50 p-2 hover:border-holz-500">
-                  <img src={s.thumbnail} className="w-full rounded-leafsm" /><p className="mt-1 truncate font-mono text-xs">{s.name}</p>
+                <button key={s.id} onClick={() => pick(s.id)} className="rounded-lg border border-holz-line bg-holz-50 p-2 hover:border-holz-500">
+                  <img src={s.thumbnail} className="w-full rounded-lg" /><p className="mt-1 truncate text-xs">{s.name}</p>
                 </button>
               ))}
             </div>

@@ -19,7 +19,7 @@ export default function MemberActionsDialog({ server, member, myPerms, onClose }
           {timedOut && <span className="text-sm text-holz-warn">Silenciado até {new Date(member.timeout_until!).toLocaleString()}</span>}</div>
         {myPerms.includes('moderate_members') && (
           <div className="space-y-1.5">
-            <p className="font-mono text-[11px] uppercase tracking-widest text-holz-mute">silenciar (timeout)</p>
+            <p className="text-xs font-semibold text-holz-mute">silenciar (timeout)</p>
             <div className="grid grid-cols-2 gap-1.5">
               {TIMEOUTS.map(([m, l]) => <button key={m} className={btn} onClick={() => run(supabase.rpc('timeout_member', { p_server: server.id, p_user: member.user_id, p_minutes: m }))}>{l}</button>)}
             </div>
@@ -32,7 +32,7 @@ export default function MemberActionsDialog({ server, member, myPerms, onClose }
         {myPerms.includes('ban_members') && (
           <div className="space-y-1.5">
             <input value={reason} onChange={e => setReason(e.target.value)} maxLength={200} placeholder="Motivo do banimento (opcional)"
-              className="w-full rounded-leafsm border border-holz-line bg-holz-200 p-2 text-sm outline-none focus:border-holz-500" />
+              className="w-full rounded-lg border border-holz-line bg-holz-200 p-2 text-sm outline-none focus:border-holz-500" />
             <button className={`${btn} text-holz-coral`} onClick={() => confirm(`Banir ${name}? Ele não poderá voltar pelo convite.`) && run(supabase.rpc('ban_member', { p_server: server.id, p_user: member.user_id, p_reason: reason }))}>Banir</button>
           </div>
         )}

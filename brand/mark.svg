@@ -2,4 +2,4 @@
 <defs><mask id="h"><rect width="512" height="512" fill="#fff"/>
 <g fill="none" stroke="#000" stroke-width="10" stroke-linecap="round"><circle cx="256" cy="256" r="192"/><path d="M256 64A192 192 0 0 1 448 256" transform="translate(0 0)" stroke="none"/><circle cx="259" cy="257" r="172" stroke-dasharray="760 400"/></g>
 <rect x="158" y="126" width="56" height="260" rx="28" fill="#000"/><rect x="298" y="126" width="56" height="260" rx="28" fill="#000"/><rect x="196" y="236" width="120" height="40" rx="20" fill="#000"/></mask></defs>
-<circle cx="256" cy="256" r="214" fill="#C8F169" mask="url(#h)"/></svg>
+<circle cx="256" cy="256" r="214" fill="#E07A4E" mask="url(#h)"/></svg>

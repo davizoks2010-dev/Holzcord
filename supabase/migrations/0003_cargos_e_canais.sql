@@ -103,15 +103,19 @@ create policy "atribuir cargo" on public.members for update to authenticated
   using (has_perm(server_id, 'manage_roles') and member_pos(server_id, user_id) < member_pos(server_id, auth.uid()))
   with check (role_id is null or role_pos(role_id) < member_pos(server_id, auth.uid()));
 drop policy if exists "sair do servidor" on public.members;
+drop policy if exists "sair ou expulsar" on public.members;
 create policy "sair ou expulsar" on public.members for delete to authenticated using (
   (user_id = auth.uid() and not exists (select 1 from servers s where s.id = server_id and s.owner_id = auth.uid()))
   or (has_perm(server_id, 'kick_members') and member_pos(server_id, user_id) < member_pos(server_id, auth.uid())));
 
 -- canais
 drop policy if exists "gerir canais" on public.channels;
+drop policy if exists "criar canais" on public.channels;
 create policy "criar canais" on public.channels for insert to authenticated with check (has_perm(server_id, 'manage_channels'));
+drop policy if exists "editar canais" on public.channels;
 create policy "editar canais" on public.channels for update to authenticated
   using (has_perm(server_id, 'manage_channels')) with check (has_perm(server_id, 'manage_channels'));
+drop policy if exists "apagar canais" on public.channels;
 create policy "apagar canais" on public.channels for delete to authenticated using (has_perm(server_id, 'manage_channels'));
 
 -- mensagens e servidor
@@ -122,4 +126,4 @@ drop policy if exists "editar servidor" on public.servers;
 create policy "editar servidor" on public.servers for update to authenticated
   using (has_perm(id, 'manage_server')) with check (has_perm(id, 'manage_server'));
 
-alter publication supabase_realtime add table public.roles;
+do $$ begin alter publication supabase_realtime add table public.roles; exception when duplicate_object then null; end $$;

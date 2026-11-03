@@ -16,7 +16,7 @@ export default function BansDialog({ serverId, onClose }: { serverId: string; on
     <Modal title="Usuários banidos" onClose={onClose}>
       <div className="space-y-2">
         {rows?.map(b => (
-          <div key={b.user_id} className="flex items-center gap-3 rounded-leafsm border border-holz-line px-3 py-2">
+          <div key={b.user_id} className="flex items-center gap-3 rounded-lg border border-holz-line px-3 py-2">
             <div className="min-w-0 flex-1"><div className="font-display font-semibold">{b.profiles?.username ?? 'usuário'}</div>{b.reason && <div className="truncate text-xs text-holz-mute">{b.reason}</div>}</div>
             <button onClick={() => unban(b.user_id)} className="btn border border-holz-line px-3 py-1 text-sm">Desbanir</button>
           </div>

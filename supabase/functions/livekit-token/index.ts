@@ -15,7 +15,7 @@ Deno.serve(async (req) => {
   const { channelId } = await req.json()
   // RLS: so retorna se o usuario for membro do servidor
   const { data: ch } = await supabase.from('channels').select('id,type').eq('id', channelId).maybeSingle()
-  if (!ch || ch.type !== 'voice') return new Response('forbidden', { status: 403, headers: cors })
+  if (!ch || !['voice', 'dm'].includes(ch.type)) return new Response('forbidden', { status: 403, headers: cors })
   const { data: prof } = await supabase.from('profiles').select('username').eq('id', user.id).single()
 
   const at = new AccessToken(Deno.env.get('LIVEKIT_API_KEY')!, Deno.env.get('LIVEKIT_API_SECRET')!, {

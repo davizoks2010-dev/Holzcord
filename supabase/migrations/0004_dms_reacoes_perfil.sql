@@ -100,4 +100,4 @@ end $$;
 drop policy if exists "apagar servidor" on public.servers;
 create policy "apagar servidor" on public.servers for delete to authenticated using (owner_id = auth.uid());
 
-alter publication supabase_realtime add table public.dm_members;
+do $$ begin alter publication supabase_realtime add table public.dm_members; exception when duplicate_object then null; end $$;

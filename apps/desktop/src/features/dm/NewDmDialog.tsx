@@ -25,11 +25,11 @@ export default function NewDmDialog({ userId, onOpen, onGroup, onClose }: Props)
     <Modal title="Nova conversa" onClose={onClose}>
       <p className="mb-2 text-xs text-holz-mute">Clique para abrir uma conversa. Para criar um grupo, marque 2 ou mais pessoas.</p>
       <input autoFocus value={q} onChange={e => setQ(e.target.value)} placeholder="Buscar usuário pelo nome"
-        className="mb-3 w-full rounded-leafsm border border-holz-line bg-holz-200 p-2.5 outline-none focus:border-holz-500" />
+        className="mb-3 w-full rounded-lg border border-holz-line bg-holz-200 p-2.5 outline-none focus:border-holz-500" />
       {err && <p className="mb-2 text-sm text-holz-coral">{err}</p>}
       <div className="max-h-60 space-y-1 overflow-y-auto">
         {list.map(p => (
-          <div key={p.id} className="flex items-center gap-2 rounded-leafsm px-2 py-1.5 hover:bg-holz-200">
+          <div key={p.id} className="flex items-center gap-2 rounded-lg px-2 py-1.5 hover:bg-holz-200">
             <input type="checkbox" checked={picked.some(x => x.id === p.id)} onChange={() => toggle(p)} className="accent-holz-500" />
             <button className="flex flex-1 items-center gap-3 text-left" onClick={async () => { const e = await onOpen(p.id); if (e) setErr(e); else onClose() }}>
               <Avatar name={p.username} url={p.avatar_url} size={30} /><span>{p.username}</span>
@@ -41,7 +41,7 @@ export default function NewDmDialog({ userId, onOpen, onGroup, onClose }: Props)
       {picked.length >= 2 && (
         <div className="mt-3 space-y-2 border-t border-holz-line pt-3">
           <input value={groupName} onChange={e => setGroupName(e.target.value)} maxLength={50} placeholder="Nome do grupo (opcional)"
-            className="w-full rounded-leafsm border border-holz-line bg-holz-200 p-2.5 outline-none focus:border-holz-500" />
+            className="w-full rounded-lg border border-holz-line bg-holz-200 p-2.5 outline-none focus:border-holz-500" />
           <button onClick={create} className="btn w-full justify-center bg-holz-500 text-holz-onaccent">Criar grupo com {picked.length} pessoas</button>
         </div>
       )}

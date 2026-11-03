@@ -20,7 +20,7 @@ export default function CategoryDialog({ serverId, category, onClose }: { server
     <Modal title={category ? 'Editar categoria' : 'Nova categoria'} onClose={onClose}>
       <form onSubmit={save} className="space-y-3">
         <input autoFocus value={name} maxLength={50} onChange={e => setName(e.target.value)} placeholder="Nome da categoria"
-          className="w-full rounded-leafsm border border-holz-line bg-holz-200 p-2.5 outline-none focus:border-holz-500" />
+          className="w-full rounded-lg border border-holz-line bg-holz-200 p-2.5 outline-none focus:border-holz-500" />
         {err && <p className="text-sm text-holz-coral">{err}</p>}
         <div className="flex items-center gap-2">
           {category && <button type="button" onClick={remove} className="px-3 text-holz-coral">Apagar</button>}<span className="flex-1" />

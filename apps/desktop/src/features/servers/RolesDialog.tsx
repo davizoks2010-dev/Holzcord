@@ -15,7 +15,7 @@ export default function RolesDialog({ server, roles, myPos, myPerms, onClose }: 
   const editable = !!cur && canManage(myPos, cur.position)
   const [err, setErr] = useState('')
 
-  const field = 'rounded-leafsm border border-holz-line bg-holz-200 p-2 outline-none focus:border-holz-500 disabled:opacity-50'
+  const field = 'rounded-lg border border-holz-line bg-holz-200 p-2 outline-none focus:border-holz-500 disabled:opacity-50'
   const patch = (p: Partial<Role>) => cur && setDraft({ ...cur, ...p })
 
   async function create() {
@@ -59,27 +59,27 @@ export default function RolesDialog({ server, roles, myPos, myPerms, onClose }: 
         <div className="w-52 shrink-0 space-y-1">
           {sorted.map(r => (
             <button key={r.id} onClick={() => { setSelId(r.id); setDraft(null) }}
-              className={`flex w-full items-center gap-2 rounded-leafsm px-3 py-2 text-left ${r.id === selId ? 'bg-holz-200' : 'hover:bg-holz-200/60'}`}>
+              className={`flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left ${r.id === selId ? 'bg-holz-200' : 'hover:bg-holz-200/60'}`}>
               <span className="h-3 w-3 rounded-full" style={{ background: r.color }} />
               <span className="flex-1 truncate">{r.name}</span>
-              {!canManage(myPos, r.position) && <span title="Acima ou igual ao seu cargo" className="text-xs text-holz-mute">🔒</span>}
+              {!canManage(myPos, r.position) && <span title="Acima ou igual ao seu cargo" className="text-holz-mute"><Icon name="lock" size={14} /></span>}
             </button>
           ))}
           {myPerms.includes('manage_roles') && myPos > 0 && (
-            <button onClick={create} className="btn mt-2 w-full justify-center border border-dashed border-holz-live text-holz-live"><Icon name="plus" size={16} />Novo cargo</button>
+            <button onClick={create} className="btn mt-2 w-full justify-center border border-holz-live text-holz-live"><Icon name="plus" size={16} />Novo cargo</button>
           )}
         </div>
         {cur ? (
           <div className="flex-1 space-y-3">
             <div className="flex gap-2">
               <input disabled={!editable} value={cur.name} maxLength={32} onChange={e => patch({ name: e.target.value })} className={`${field} flex-1`} placeholder="Nome do cargo" />
-              <input disabled={!editable} type="color" value={cur.color} onChange={e => patch({ color: e.target.value })} className="h-10 w-12 cursor-pointer rounded-leafsm border border-holz-line bg-holz-200 p-1" />
+              <input disabled={!editable} type="color" value={cur.color} onChange={e => patch({ color: e.target.value })} className="h-10 w-12 cursor-pointer rounded-lg border border-holz-line bg-holz-200 p-1" />
             </div>
-            <p className="font-mono text-[11px] uppercase tracking-widest text-holz-mute">permissões</p>
+            <p className="text-xs font-semibold text-holz-mute">permissões</p>
             {PERMS.map(p => {
               const allowed = myPerms.includes(p.key)
               return (
-                <label key={p.key} className={`flex items-start gap-3 rounded-leafsm border border-holz-line p-2.5 ${editable && allowed ? 'cursor-pointer' : 'opacity-50'}`}>
+                <label key={p.key} className={`flex items-start gap-3 rounded-lg border border-holz-line p-2.5 ${editable && allowed ? 'cursor-pointer' : 'opacity-50'}`}>
                   <input type="checkbox" disabled={!editable || !allowed} checked={cur.perms.includes(p.key)} onChange={() => toggle(p.key)} className="mt-1 accent-holz-500" />
                   <span><b>{p.label}</b><br /><span className="text-xs text-holz-mute">{allowed ? p.hint : 'Você não tem esta permissão para conceder'}</span></span>
                 </label>

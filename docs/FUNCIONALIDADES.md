@@ -15,9 +15,10 @@ Legenda: ✅ pronto · 🔨 em desenvolvimento · 📅 planejado · 🚫 fora de
 | Indicador de mensagens não lidas por canal | ✅ |
 | Blocos de código, spoilers, citações, listas | ✅ |
 | Enquetes | ✅ |
-| Encaminhar mensagem, threads/tópicos | 📅 |
-| Pré-visualização de links (embeds) | 📅 (precisa de serviço externo) |
-| GIFs e stickers | 📅 (precisa de chave de API do Tenor/Giphy) |
+| Tópicos (threads) e encaminhar mensagem | ✅ |
+| Pré-visualização de links | ✅ (no app instalado) |
+| GIFs | ✅ (com chave gratuita do Giphy nas Configurações) |
+| Figurinhas (stickers) | 📅 |
 
 ## Servidores
 | Função | Status |
@@ -26,12 +27,12 @@ Legenda: ✅ pronto · 🔨 em desenvolvimento · 📅 planejado · 🚫 fora de
 | Cargos com hierarquia e permissões; expulsar | ✅ |
 | Renomear, regenerar convite, apagar servidor | ✅ |
 | Categorias de canais | ✅ |
-| Reordenar canais/categorias por arrastar | 📅 |
+| Reordenar canais arrastando | ✅ |
 | Modo lento e tópico do canal | ✅ |
 | Canais privados por cargo | ✅ |
 | Banimento, timeout, log de auditoria | ✅ |
 | Ícone do servidor | ✅ |
-| Convites com validade/limite de usos | 📅 |
+| Convites com validade e limite de usos | ✅ |
 | Emojis personalizados, boost, descoberta de servidores | 🚫 exige infraestrutura/pagamentos |
 | Canais de anúncio e Stage | 📅 |
 
@@ -42,7 +43,7 @@ Legenda: ✅ pronto · 🔨 em desenvolvimento · 📅 planejado · 🚫 fora de
 | Perfil: avatar, "sobre mim", status (online/ausente/não perturbe/invisível) | ✅ |
 | Lista de amigos, pedidos, bloquear | ✅ |
 | DMs em grupo | ✅ |
-| Chamadas de voz/vídeo em DM | 📅 |
+| Chamadas de voz/vídeo em DM | ✅ (exige republicar a função de voz) |
 
 ## Voz e vídeo
 | Função | Status |

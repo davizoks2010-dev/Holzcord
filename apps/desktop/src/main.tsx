@@ -9,6 +9,7 @@ import '@fontsource/jetbrains-mono/400.css'
 import App from './App'
 import './index.css'
 
-import { applyTheme, useSettings } from './lib/settings'
+import { applyAccent, applyTheme, useSettings } from './lib/settings'
 applyTheme(useSettings.getState().theme)
+applyAccent(useSettings.getState().accent)
 createRoot(document.getElementById('root')!).render(<App />)

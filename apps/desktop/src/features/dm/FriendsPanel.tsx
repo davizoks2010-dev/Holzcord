@@ -23,7 +23,7 @@ export default function FriendsPanel({ friends, blocked, reload, onMessage }: Pr
     if (!error) setName(''); reload()
   }
   const row = (p: Person, actions: React.ReactNode, sub?: string) => (
-    <div key={p.id + (sub ?? '')} className="flex items-center gap-3 rounded-leafsm border border-holz-line bg-holz-100 px-3 py-2.5">
+    <div key={p.id + (sub ?? '')} className="flex items-center gap-3 rounded-lg border border-holz-line bg-holz-100 px-3 py-2.5">
       <Avatar name={p.username} url={p.avatar_url} size={34} />
       <div className="min-w-0 flex-1"><div className="truncate font-display font-semibold">{p.username}</div>{sub && <div className="text-xs text-holz-mute">{sub}</div>}</div>
       {actions}
@@ -38,7 +38,7 @@ export default function FriendsPanel({ friends, blocked, reload, onMessage }: Pr
         <Icon name="user" className="text-holz-500" /><span className="font-display text-lg font-semibold">Amigos</span>
         <div className="ml-4 flex gap-1">
           {tabs.map(([k, l]) => (
-            <button key={k} onClick={() => setTab(k)} className={`rounded-leafsm px-3 py-1.5 text-sm ${tab === k ? (k === 'add' ? 'bg-holz-500 text-holz-onaccent' : 'bg-holz-200') : 'text-holz-mute hover:bg-holz-200/60'}`}>{l}</button>
+            <button key={k} onClick={() => setTab(k)} className={`rounded-lg px-3 py-1.5 text-sm ${tab === k ? (k === 'add' ? 'bg-holz-500 text-holz-onaccent' : 'bg-holz-200') : 'text-holz-mute hover:bg-holz-200/60'}`}>{l}</button>
           ))}
         </div>
       </header>
@@ -62,7 +62,7 @@ export default function FriendsPanel({ friends, blocked, reload, onMessage }: Pr
             <p className="text-holz-mute">Digite o nome de usuário exatamente como a pessoa usa no Holzcord.</p>
             <div className="flex gap-2">
               <input autoFocus value={name} onChange={e => setName(e.target.value)} placeholder="nome de usuário"
-                className="flex-1 rounded-leafsm border border-holz-line bg-holz-200 p-2.5 outline-none focus:border-holz-500" />
+                className="flex-1 rounded-lg border border-holz-line bg-holz-200 p-2.5 outline-none focus:border-holz-500" />
               <button className="btn bg-holz-500 text-holz-onaccent">Enviar pedido</button>
             </div>
             {msg && <p className={`text-sm ${msg.ok ? 'text-holz-live' : 'text-holz-coral'}`}>{msg.t}</p>}

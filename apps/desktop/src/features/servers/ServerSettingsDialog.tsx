@@ -6,8 +6,9 @@ import Avatar from '../../components/Avatar'
 interface Props { server: Server; canManage: boolean; canBan: boolean; canAudit: boolean; onOpen: (k: 'audit' | 'bans') => void; isOwner: boolean; onChanged: (s?: Server) => void; onDeleted: () => void; onClose: () => void }
 
 export default function ServerSettingsDialog({ server, canManage, canBan, canAudit, onOpen, isOwner, onChanged, onDeleted, onClose }: Props) {
+  const [hours, setHours] = useState(24); const [uses, setUses] = useState(0); const [temp, setTemp] = useState('')
   const [name, setName] = useState(server.name); const [code, setCode] = useState(server.invite_code); const [err, setErr] = useState('')
-  const field = 'w-full rounded-leafsm border border-holz-line bg-holz-200 p-2.5 outline-none focus:border-holz-500 disabled:opacity-50'
+  const field = 'w-full rounded-lg border border-holz-line bg-holz-200 p-2.5 outline-none focus:border-holz-500 disabled:opacity-50'
 
   async function rename() {
     setErr('')
@@ -24,6 +25,12 @@ export default function ServerSettingsDialog({ server, canManage, canBan, canAud
     const { error } = await supabase.from('servers').update({ icon_url: url }).eq('id', server.id)
     if (error) return setErr(error.message)
     onChanged({ ...server, icon_url: url, name: name.trim() || server.name, invite_code: code })
+  }
+  async function newInvite() {
+    setErr('')
+    const { data, error } = await supabase.rpc('create_invite', { p_server: server.id, p_hours: hours, p_max_uses: uses })
+    if (error) return setErr(error.message)
+    setTemp(data as string)
   }
   async function regen() {
     setErr('')
@@ -53,8 +60,17 @@ export default function ServerSettingsDialog({ server, canManage, canBan, canAud
         </div>
         <label className="block text-sm text-holz-mute">Código de convite</label>
         <div className="flex gap-2">
-          <code className="flex-1 select-all rounded-leafsm border border-dashed border-holz-line p-2.5 font-mono text-holz-500">{code}</code>
+          <code className="flex-1 select-all rounded-lg border border-holz-line p-2.5 text-holz-500">{code}</code>
           <button disabled={!canManage} onClick={regen} className="btn border border-holz-line disabled:opacity-40">Gerar novo</button>
+        </div>
+        <label className="block text-sm text-holz-mute">Convite temporário</label>
+        <div className="flex gap-2">
+          <select value={hours} onChange={e => setHours(Number(e.target.value))} className="field"><option value={1}>Expira em 1 hora</option><option value={24}>Expira em 1 dia</option><option value={168}>Expira em 7 dias</option><option value={0}>Nunca expira</option></select>
+          <select value={uses} onChange={e => setUses(Number(e.target.value))} className="field"><option value={1}>1 uso</option><option value={5}>5 usos</option><option value={25}>25 usos</option><option value={0}>Usos ilimitados</option></select>
+        </div>
+        <div className="flex gap-2">
+          <code className="flex-1 select-all rounded-lg border border-holz-line p-2.5 text-holz-500">{temp || 'Clique em "Criar convite"'}</code>
+          <button onClick={newInvite} className="btn border border-holz-line">Criar convite</button>
         </div>
         {!canManage && <p className="text-sm text-holz-mute">Você não tem a permissão "Gerenciar servidor".</p>}
         {err && <p className="text-sm text-holz-coral">{err}</p>}

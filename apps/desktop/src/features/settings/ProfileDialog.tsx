@@ -10,7 +10,7 @@ export default function ProfileDialog({ profile, onSaved, onClose }: { profile: 
   const [status, setStatus] = useState<Profile['status']>(profile.status)
   const [avatar, setAvatar] = useState(profile.avatar_url)
   const [busy, setBusy] = useState(false); const [err, setErr] = useState('')
-  const field = 'w-full rounded-leafsm border border-holz-line bg-holz-200 p-2.5 outline-none focus:border-holz-500'
+  const field = 'w-full rounded-lg border border-holz-line bg-holz-200 p-2.5 outline-none focus:border-holz-500'
 
   async function pickAvatar(file: File) {
     if (file.size > 2_000_000) return setErr('A imagem deve ter até 2 MB.')

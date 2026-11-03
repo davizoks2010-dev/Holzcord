@@ -22,8 +22,8 @@ export default function AuditDialog({ serverId, onClose }: { serverId: string; o
     <Modal title="Log de auditoria" onClose={onClose} wide>
       <div className="space-y-1.5">
         {rows?.map(r => (
-          <div key={r.id} className="flex items-baseline gap-3 rounded-leafsm border border-holz-line bg-holz-50 px-3 py-2 text-sm">
-            <span className="w-36 shrink-0 font-mono text-[11px] text-holz-mute">{new Date(r.created_at).toLocaleString()}</span>
+          <div key={r.id} className="flex items-baseline gap-3 rounded-lg border border-holz-line bg-holz-50 px-3 py-2 text-sm">
+            <span className="w-36 shrink-0 text-[11px] text-holz-mute">{new Date(r.created_at).toLocaleString()}</span>
             <span><b className="text-holz-500">{names[r.actor_id ?? ''] ?? 'alguém'}</b> {LABEL[r.action] ?? r.action} <b>{r.target}</b></span>
           </div>
         ))}

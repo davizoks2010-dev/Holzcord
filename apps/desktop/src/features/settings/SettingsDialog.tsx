@@ -1,10 +1,10 @@
 import { supabase } from '../../lib/supabase'
-import { useSettings } from '../../lib/settings'
+import { useSettings, type Accent } from '../../lib/settings'
 import Modal from '../../components/Modal'
 
 export default function SettingsDialog({ onClose }: { onClose: () => void }) {
   const s = useSettings()
-  const field = 'w-full rounded-leafsm border border-holz-line bg-holz-200 p-2.5 outline-none focus:border-holz-500'
+  const field = 'field'
   const row = 'flex cursor-pointer items-center gap-2'
   function captureKey(e: React.KeyboardEvent) {
     e.preventDefault()
@@ -18,16 +18,24 @@ export default function SettingsDialog({ onClose }: { onClose: () => void }) {
   return (
     <Modal title="Configurações" onClose={onClose}>
       <div className="space-y-4">
-        <div><p className="mb-1 font-mono text-[11px] uppercase tracking-widest text-holz-mute">aparência</p>
+        <div><p className="mb-1 text-xs font-semibold text-holz-mute">Tema</p>
           <select value={s.theme} onChange={e => s.set({ theme: e.target.value as typeof s.theme })} className={field}>
             <option value="dark">Escuro</option><option value="light">Claro</option><option value="system">Seguir o sistema</option></select></div>
-        <div><p className="mb-1 font-mono text-[11px] uppercase tracking-widest text-holz-mute">notificações</p>
+        <div><p className="mb-1 text-xs font-semibold text-holz-mute">Cor de destaque</p>
+          <div className="flex gap-2">
+            {([['terracota', '#E07A4E'], ['oceano', '#5C9CE6'], ['floresta', '#6EBA7D'], ['violeta', '#A486F0'], ['rosa', '#E878A6']] as [Accent, string][]).map(([k, c]) => (
+              <button key={k} title={k} onClick={() => s.set({ accent: k })} style={{ background: c }} className={`h-8 w-8 rounded-full ${s.accent === k ? 'ring-2 ring-holz-900 ring-offset-2 ring-offset-holz-100' : ''}`} />
+            ))}
+          </div></div>
+        <div><p className="mb-1 text-xs font-semibold text-holz-mute">GIFs</p>
+          <input value={s.giphyKey} onChange={e => s.set({ giphyKey: e.target.value.trim() })} placeholder="Chave gratuita do Giphy (developers.giphy.com)" className={field} /></div>
+        <div><p className="mb-1 text-xs font-semibold text-holz-mute">Notificações</p>
           <label className={row}><input type="checkbox" checked={s.notifications} onChange={e => s.set({ notifications: e.target.checked })} className="accent-holz-500" /> Avisar sobre menções e mensagens diretas</label></div>
-        <div className="space-y-1.5"><p className="font-mono text-[11px] uppercase tracking-widest text-holz-mute">voz</p>
+        <div className="space-y-1.5"><p className="text-xs font-semibold text-holz-mute">Voz</p>
           <label className={row}><input type="checkbox" checked={s.noiseSuppression} onChange={e => s.set({ noiseSuppression: e.target.checked })} className="accent-holz-500" /> Supressão de ruído</label>
           <label className={row}><input type="checkbox" checked={s.echoCancellation} onChange={e => s.set({ echoCancellation: e.target.checked })} className="accent-holz-500" /> Cancelamento de eco</label>
           <p className="pt-1 text-xs text-holz-mute">Vale na próxima vez que você entrar em um canal de voz.</p></div>
-        <div><p className="mb-1 font-mono text-[11px] uppercase tracking-widest text-holz-mute">atalho global do microfone</p>
+        <div><p className="mb-1 text-xs font-semibold text-holz-mute">Atalho do microfone</p>
           <input readOnly value={s.ptt} onKeyDown={captureKey} placeholder="Clique aqui e aperte uma tecla (Backspace limpa)" className={field} />
           <p className="mt-1 text-xs text-holz-mute">Liga e desliga o microfone mesmo com o app em segundo plano.</p></div>
         <div className="flex justify-between border-t border-holz-line pt-3">

@@ -11,7 +11,7 @@ export default function ChannelSettingsDialog({ channel, categories, roles, onCl
   const [slow, setSlow] = useState(channel.slowmode_seconds ?? 0); const [cat, setCat] = useState(channel.category_id ?? '')
   const [priv, setPriv] = useState(!!channel.is_private); const [allowed, setAllowed] = useState<string[]>([])
   const [err, setErr] = useState(''); const [busy, setBusy] = useState(false)
-  const field = 'w-full rounded-leafsm border border-holz-line bg-holz-200 p-2.5 outline-none focus:border-holz-500'
+  const field = 'w-full rounded-lg border border-holz-line bg-holz-200 p-2.5 outline-none focus:border-holz-500'
 
   useEffect(() => { supabase.from('channel_roles').select('role_id').eq('channel_id', channel.id).then(({ data }) => setAllowed((data ?? []).map(r => r.role_id as string))) }, [channel.id])
 
@@ -48,7 +48,7 @@ export default function ChannelSettingsDialog({ channel, categories, roles, onCl
         </select>
         <label className="flex cursor-pointer items-center gap-2"><input type="checkbox" checked={priv} onChange={e => setPriv(e.target.checked)} className="accent-holz-500" /> Canal privado (só cargos escolhidos)</label>
         {priv && (
-          <div className="max-h-32 space-y-1 overflow-y-auto rounded-leafsm border border-holz-line p-2">
+          <div className="max-h-32 space-y-1 overflow-y-auto rounded-lg border border-holz-line p-2">
             {roles.sort((a, b) => b.position - a.position).map(r => (
               <label key={r.id} className="flex cursor-pointer items-center gap-2 text-sm">
                 <input type="checkbox" checked={allowed.includes(r.id)} className="accent-holz-500"

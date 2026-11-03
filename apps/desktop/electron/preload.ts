@@ -5,5 +5,6 @@ contextBridge.exposeInMainWorld('holz', {
     ipcRenderer.on('screen:sources', (_e, s) => cb(s)),
   chooseScreen: (id: string | null) => ipcRenderer.send('screen:choose', id),
   setPushToTalk: (acc: string | null) => ipcRenderer.invoke('ptt:set', acc),
+  linkPreview: (url: string) => ipcRenderer.invoke('link:preview', url),
   onPushToTalk: (cb: () => void) => ipcRenderer.on('ptt:toggle', () => cb())
 })

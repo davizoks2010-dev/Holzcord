@@ -1,5 +1,7 @@
-import { app, BrowserWindow, desktopCapturer, ipcMain, session, shell, Tray, Menu, globalShortcut, nativeImage } from 'electron'
+import { app, BrowserWindow, desktopCapturer, ipcMain, net, session, shell, Tray, Menu, globalShortcut, nativeImage } from 'electron'
 import path from 'node:path'
+import dns from 'node:dns/promises'
+import nodeNet from 'node:net'
 
 let win: BrowserWindow | null = null
 let tray: Tray | null = null
@@ -39,6 +41,51 @@ function setupPermissions() {
   session.defaultSession.setPermissionRequestHandler((_wc, permission, cb) =>
     cb(['media', 'display-capture', 'notifications', 'mediaKeySystem'].includes(permission)))
 }
+
+// ---- Previa de links (titulo, descricao e imagem). So http/https e nunca enderecos de rede interna.
+function isPrivateIp(ip: string): boolean {
+  if (nodeNet.isIPv4(ip)) {
+    const [a, b] = ip.split('.').map(Number)
+    return a === 10 || a === 127 || a === 0 || (a === 169 && b === 254) || (a === 172 && b >= 16 && b <= 31) || (a === 192 && b === 168) || (a === 100 && b >= 64 && b <= 127)
+  }
+  if (nodeNet.isIPv6(ip)) { const l = ip.toLowerCase(); return l === '::1' || l === '::' || l.startsWith('fc') || l.startsWith('fd') || l.startsWith('fe80') || l.startsWith('::ffff:') }
+  return true
+}
+const previewCache = new Map<string, unknown>()
+const meta = (html: string, keys: string[]) => {
+  for (const k of keys) {
+    const m = html.match(new RegExp(`<meta[^>]+(?:property|name)=["']${k}["'][^>]*content=["']([^"']*)["']`, 'i')) ?? html.match(new RegExp(`<meta[^>]+content=["']([^"']*)["'][^>]*(?:property|name)=["']${k}["']`, 'i'))
+    if (m?.[1]) return m[1].replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'").trim()
+  }
+  return ''
+}
+async function fetchPreview(url0: string) {
+  if (previewCache.has(url0)) return previewCache.get(url0)
+  let url = url0
+  for (let hop = 0; hop < 4; hop++) {
+    const u = new URL(url)
+    if (!['http:', 'https:'].includes(u.protocol)) return null
+    const addrs = await dns.lookup(u.hostname, { all: true })
+    if (!addrs.length || addrs.some(a => isPrivateIp(a.address))) return null
+    const ctrl = new AbortController(); const timer = setTimeout(() => ctrl.abort(), 5000)
+    try {
+      const res = await net.fetch(url, { redirect: 'manual', signal: ctrl.signal, headers: { 'user-agent': 'Mozilla/5.0 Holzcord-LinkPreview', accept: 'text/html' } })
+      if (res.status >= 300 && res.status < 400) { const loc = res.headers.get('location'); if (!loc) return null; url = new URL(loc, url).toString(); continue }
+      if (!res.ok || !(res.headers.get('content-type') ?? '').includes('text/html') || !res.body) return null
+      const reader = res.body.getReader(); const dec = new TextDecoder(); let html = ''
+      while (html.length < 400_000) { const { done, value } = await reader.read(); if (done) break; html += dec.decode(value, { stream: true }) }
+      reader.cancel().catch(() => {})
+      const title = meta(html, ['og:title', 'twitter:title']) || (html.match(/<title[^>]*>([^<]*)<\/title>/i)?.[1] ?? '').trim()
+      if (!title) return null
+      let image = meta(html, ['og:image', 'twitter:image'])
+      try { image = image ? new URL(image, url).toString() : ''; if (!/^https?:/.test(image)) image = '' } catch { image = '' }
+      const out = { url: url0, title: title.slice(0, 120), description: meta(html, ['og:description', 'description', 'twitter:description']).slice(0, 220), image, site: meta(html, ['og:site_name']) || new URL(url).hostname }
+      previewCache.set(url0, out); return out
+    } finally { clearTimeout(timer) }
+  }
+  return null
+}
+ipcMain.handle('link:preview', async (_e, url: string) => { try { return await fetchPreview(String(url)) } catch { return null } })
 
 // Push-to-talk global
 function registerPtt(accelerator: string | null) {

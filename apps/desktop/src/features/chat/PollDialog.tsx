@@ -5,7 +5,7 @@ import Modal from '../../components/Modal'
 export default function PollDialog({ channelId, onClose }: { channelId: string; onClose: () => void }) {
   const [q, setQ] = useState(''); const [opts, setOpts] = useState(['', '']); const [multi, setMulti] = useState(false); const [err, setErr] = useState('')
   const clean = opts.map(o => o.trim()).filter(Boolean)
-  const field = 'w-full rounded-leafsm border border-holz-line bg-holz-200 p-2.5 outline-none focus:border-holz-500'
+  const field = 'w-full rounded-lg border border-holz-line bg-holz-200 p-2.5 outline-none focus:border-holz-500'
   async function create() {
     const { error } = await supabase.rpc('create_poll', { p_channel: channelId, p_question: q, p_options: clean, p_multiple: multi })
     if (error) setErr(error.message); else onClose()

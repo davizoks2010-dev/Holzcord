@@ -38,3 +38,10 @@ Execute `supabase/migrations/0004_dms_reacoes_perfil.sql` no SQL Editor (depois 
 
 ## Lote v0.3 (amigos, grupos, categorias, canais privados, moderação, enquetes)
 Execute `supabase/migrations/0005_social_moderacao.sql` no SQL Editor (depois de 0001 a 0004).
+
+## Atualizar o banco com um único arquivo (recomendado)
+Use `supabase/holzcord-banco-completo.sql`: cole no SQL Editor do Supabase e clique em Run. Ele cria o que falta e pode ser repetido sem problema.
+O próprio app avisa quando o banco está desatualizado e tem um botão "Copiar o SQL".
+
+## Chamadas em DM
+Republique a função de voz depois de atualizar: `supabase functions deploy livekit-token`.

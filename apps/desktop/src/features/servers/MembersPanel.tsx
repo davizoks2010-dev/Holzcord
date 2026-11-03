@@ -15,23 +15,23 @@ export default function MembersPanel({ server, roles, members, online, statuses,
   }
   return (
     <aside className="w-60 shrink-0 overflow-y-auto border-l border-holz-line bg-holz-100 p-3">
-      <p className="mb-3 px-1 font-mono text-[11px] uppercase tracking-widest text-holz-mute">
+      <p className="mb-3 px-1 text-xs font-semibold text-holz-mute">
         membros · {members.filter(m => online.has(m.user_id) || m.user_id === userId).length}/{members.length} online
       </p>
       {groups.map(({ role, members: ms }) => (
         <section key={role.id} className="mb-4">
-          <h3 className="mb-1 px-1 font-mono text-[11px] uppercase tracking-widest" style={{ color: roleColor(role.color) }}>{role.name} — {ms.length}</h3>
+          <h3 className="mb-1 px-1 text-xs font-semibold" style={{ color: roleColor(role.color) }}>{role.name} — {ms.length}</h3>
           {ms.sort((a, b) => Number(online.has(b.user_id) || b.user_id === userId) - Number(online.has(a.user_id) || a.user_id === userId)).map(m => {
             const isOn = online.has(m.user_id) || m.user_id === userId
             const target = positionOf(server, roles, members, m.user_id)
             const manageable = m.user_id !== userId && canManage(myPos, target)
             return (
-              <div key={m.user_id} className={`group flex items-center gap-2 rounded-leafsm px-2 py-1.5 hover:bg-holz-200 ${isOn ? '' : 'opacity-50'}`}>
+              <div key={m.user_id} className={`group flex items-center gap-2 rounded-lg px-2 py-1.5 hover:bg-holz-200 ${isOn ? '' : 'opacity-50'}`}>
                 <Avatar name={m.profiles?.username ?? '?'} url={m.profiles?.avatar_url} size={24} />
                 <span title={statuses[m.user_id] ?? ''} className={`-ml-3 mt-4 h-2.5 w-2.5 shrink-0 rounded-full border border-holz-100 ${!isOn ? 'bg-holz-line' : (statuses[m.user_id] === 'dnd' ? 'bg-holz-coral' : statuses[m.user_id] === 'idle' ? 'bg-holz-warn' : 'bg-holz-live')}`} />
                 <span className="flex-1 truncate" style={{ color: roleColor(role.color) }}>
                   {m.profiles?.username ?? 'usuário'}{m.user_id === userId && <span className="text-holz-mute"> (você)</span>}
-                  {m.user_id === server.owner_id && <span title="Dono"> ♛</span>}{m.timeout_until && new Date(m.timeout_until) > new Date() && <span title="Silenciado" className="text-holz-warn"> ⏳</span>}
+                  {m.user_id === server.owner_id && <span title="Dono do servidor" className="ml-1 inline-block align-middle text-holz-warn"><Icon name="crown" size={13} /></span>}{m.timeout_until && new Date(m.timeout_until) > new Date() && <span title="Silenciado" className="ml-1 inline-block align-middle text-holz-warn"><Icon name="clock" size={13} /></span>}
                 </span>
                 {m.user_id !== userId && <button title="Enviar mensagem" onClick={() => onDM(m.user_id)} className="hidden text-holz-mute hover:text-holz-500 group-hover:block"><Icon name="dm" size={15} /></button>}
                 {manageable && myPerms.includes('manage_roles') && (
